@@ -68,7 +68,7 @@ def show_stats():
 def main():
     st.title("Student Certificate Generator and Stats Viewer")
 
-    menu = [ "Generate Certificate", "Home"]
+    menu = [ "Generate Certificate", "Home", "View Statistics"]
     choice = st.sidebar.selectbox("Menu", menu)
 
     if choice == "Home":
@@ -77,7 +77,7 @@ def main():
     elif choice == "Generate Certificate":
         st.subheader("Generate Certificate")
         student_name = st.selectbox("Select the name of the student: ", sorted(data['Name of Students'].unique()))
-        certificate_type = st.selectbox("Select certificate type", ["DMO", "NMO"])
+        certificate_type = st.selectbox("Select certificate type", ["DMO", "NMO", "Pre-TST", "TST"])
         if st.button("Generate"):
             if certificate_type == "DMO":
                 image_bytes = generate_certificate(student_name, "COMIC.TTF",
@@ -85,6 +85,13 @@ def main():
             elif certificate_type == "NMO":
                 image_bytes = generate_nmo_certificate(student_name, "COMIC.TTF",
                                                        "./for_certificates/certificate for NMO.png")
+            elif certificate_type=="Pre-TST":
+                image_bytes = generate_nmo_certificate(student_name, "COMIC.TTF",
+                                                       "./for_certificates/certificate for pretst.png")
+            elif certificate_type=="TST":
+                image_bytes = generate_nmo_certificate(student_name, "COMIC.TTF",
+                                                       "./for_certificates/TST round certificate.png")
+
             if image_bytes is not None:
                 st.image(image_bytes, caption='Generated certificate')
                 st.download_button(
