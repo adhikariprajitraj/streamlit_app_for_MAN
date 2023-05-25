@@ -1,0 +1,6 @@
+Pillow~=9.5.0
+streamlit~=1.22.0
+pandas~=1.5.3
+seaborn~=0.12.1
+numpy~=1.23.5
+matplotlib~=3.6.2
