@@ -22,7 +22,7 @@ def generate_certificate(name, font_path, certificate_path):
     name = name.title()
     if name in dmo_dict:
         image = Image.open(certificate_path)
-        symbol_no = dmo_dict[name]
+        symbol_no = str(dmo_dict[name])
         draw = ImageDraw.Draw(image)
         font1 = ImageFont.truetype(font_path, 150)
         draw.text((600, 1100), name, font=font1, fill=(0, 0, 0))
@@ -51,7 +51,7 @@ def generate_nmo_certificate(name, font_path, certificate_path):
         draw = ImageDraw.Draw(image)
         font1 = ImageFont.truetype(font_path, 150)
         font2 = ImageFont.truetype(font_path, 70)
-        # draw.text((750, 710), symbol_no, font=font2, fill=(0,0,0))
+        draw.text((750, 710), symbol_no, font=font2, fill=(0,0,0))
         draw.text((690, 1150), name, font=font1, fill=(0,0,0))
         image_bytes = io.BytesIO()
         image.save(image_bytes, 'PNG')
