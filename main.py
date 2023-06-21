@@ -25,10 +25,8 @@ def generate_certificate(name, font_path, certificate_path):
         symbol_no = dmo_dict[name]
         draw = ImageDraw.Draw(image)
         font1 = ImageFont.truetype(font_path, 150)
-        text_width, text_height = draw.textsize(name, font1)
-        font2 = ImageFont.truetype(font_path, 70)
         draw.text((600, 1100), name, font=font1, fill=(0, 0, 0))
-        draw.text((750, 710), symbol_no, font=font2, fill=(0, 0, 0))
+        draw.text((750, 710), symbol_no, font=font1, fill=(0, 0, 0))
         image_bytes = io.BytesIO()
         image.save(image_bytes, 'PNG')
         image_bytes.seek(0)
