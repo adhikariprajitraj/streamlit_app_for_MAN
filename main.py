@@ -77,7 +77,8 @@ def main():
     elif choice == "Generate Certificate":
         st.subheader("Generate Certificate")
         student_name = st.selectbox("Select the name of the student: ", sorted(data['Name of Students'].unique()))
-        certificate_type = st.selectbox("Select certificate type", ["DMO", "NMO", "Pre-TST", "TST"])
+        certificate_type = st.selectbox("Select certificate type", ["DMO", "NMO"])
+        # certificate_type = st.selectbox("Select certificate type", ["DMO", "NMO", "Pre-TST", "TST"])
         if st.button("Generate"):
             if certificate_type == "DMO":
                 image_bytes = generate_certificate(student_name, "COMIC.TTF",
