@@ -20,7 +20,7 @@ dmo_dict = dict(zip(data['Name of Students'], data['Score']))
 
 def generate_certificate(name, font_path, certificate_path):
     name = name.title()
-    if name in list(data['Name of Students']):
+    if name in dmo_dict:
         image = Image.open(certificate_path)
         symbol_no = dmo_dict[name]
         draw = ImageDraw.Draw(image)
