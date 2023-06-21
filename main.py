@@ -46,7 +46,7 @@ def plot_distribution():
 def generate_nmo_certificate(name, font_path, certificate_path):
     name = name.title()
     if name in dictionary_for_certificates:
-        symbol_no = dictionary_for_certificates[name]
+        symbol_no = str(dictionary_for_certificates[name])
         image = Image.open(certificate_path)
         draw = ImageDraw.Draw(image)
         font1 = ImageFont.truetype(font_path, 150)
