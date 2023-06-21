@@ -15,7 +15,7 @@ sorted_score = sorted(score)
 igo_data = pd.read_csv("./IGO/IGO scores.csv")
 nmo = pd.read_csv("./NMO_result/NMO-Result.csv")
 dictionary_for_certificates = dict(zip(nmo['Name of Students'], nmo['Registration No.']))
-dmo_dict = dict(zip(data['Name of Students'], data['Score']))
+dmo_dict = dict(zip(data['Name of Students'], data['Registration No.']))
 
 
 def generate_certificate(name, font_path, certificate_path):
@@ -25,8 +25,9 @@ def generate_certificate(name, font_path, certificate_path):
         symbol_no = str(dmo_dict[name])
         draw = ImageDraw.Draw(image)
         font1 = ImageFont.truetype(font_path, 150)
+        font2 = ImageFont.truetype(font_path, 70)
         draw.text((600, 1100), name, font=font1, fill=(0, 0, 0))
-        draw.text((750, 710), symbol_no, font=font1, fill=(0, 0, 0))
+        draw.text((750, 710), symbol_no, font=font2, fill=(0, 0, 0))
         image_bytes = io.BytesIO()
         image.save(image_bytes, 'PNG')
         image_bytes.seek(0)
