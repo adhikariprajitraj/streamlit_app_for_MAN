@@ -15,17 +15,20 @@ sorted_score = sorted(score)
 igo_data = pd.read_csv("./IGO/IGO scores.csv")
 nmo = pd.read_csv("./NMO_result/NMO-Result.csv")
 dictionary_for_certificates = dict(zip(nmo['Name of Students'], nmo['Registration No.']))
+dmo_dict = dict(zip(data['Name of Students'], data['Score']))
 
 
 def generate_certificate(name, font_path, certificate_path):
     name = name.title()
     if name in list(data['Name of Students']):
         image = Image.open(certificate_path)
-        symbol_no = dictionary_for_certificates[name]
+        symbol_no = dmo_dict[name]
         draw = ImageDraw.Draw(image)
         font1 = ImageFont.truetype(font_path, 150)
         text_width, text_height = draw.textsize(name, font1)
+        font2 = ImageFont.truetype(font_path, 70)
         draw.text((600, 1100), name, font=font1, fill=(0, 0, 0))
+        draw.text((750, 710), symbol_no, font=font2, fill=(0, 0, 0))
         image_bytes = io.BytesIO()
         image.save(image_bytes, 'PNG')
         image_bytes.seek(0)
@@ -82,7 +85,7 @@ def main():
         # certificate_type = st.selectbox("Select certificate type", ["DMO", "NMO", "Pre-TST", "TST"])
         if st.button("Generate"):
             if certificate_type == "DMO":
-                image_bytes = generate_nmo_certificate(student_name, "COMIC.TTF",
+                image_bytes = generate_certificate(student_name, "COMIC.TTF",
                                                    "./for_certificates/certificate for DMO.png")
             elif certificate_type == "NMO":
                 image_bytes = generate_nmo_certificate(student_name, "COMIC.TTF",
