@@ -21,6 +21,7 @@ def generate_certificate(name, font_path, certificate_path):
     name = name.title()
     if name in list(data['Name of Students']):
         image = Image.open(certificate_path)
+        symbol_no = dictionary_for_certificates[name]
         draw = ImageDraw.Draw(image)
         font1 = ImageFont.truetype(font_path, 150)
         text_width, text_height = draw.textsize(name, font1)
@@ -81,7 +82,7 @@ def main():
         # certificate_type = st.selectbox("Select certificate type", ["DMO", "NMO", "Pre-TST", "TST"])
         if st.button("Generate"):
             if certificate_type == "DMO":
-                image_bytes = generate_certificate(student_name, "COMIC.TTF",
+                image_bytes = generate_nmo_certificate(student_name, "COMIC.TTF",
                                                    "./for_certificates/certificate for DMO.png")
             elif certificate_type == "NMO":
                 image_bytes = generate_nmo_certificate(student_name, "COMIC.TTF",
