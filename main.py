@@ -20,7 +20,7 @@ top100 = pd.read_csv("./NMO_result/top100.csv")
 dmo_dict = dict(zip(data['Name of Students'], data['Registration No.']))
 top25_dict = dict(zip(top25['Name of Students'], data['Registration No.']))
 top100_dict = dict(zip(top100['Name of Students'], data['Registration No.']))
-dict_for_pretst = dict(zip(top100['Name of Students'], igo_data['Registration No.']))
+dict_for_pretst = dict(zip(top100['Name of Students'], top100['Registration No.']))
 
 def generate_certificate(name, font_path, certificate_path):
     name = name.title()
