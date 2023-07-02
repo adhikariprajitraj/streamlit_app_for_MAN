@@ -110,7 +110,7 @@ def show_stats():
 def main():
     st.title("Student Certificate Generator and Stats Viewer")
 
-    menu = [ "Generate Certificate", "Home", "View Statistics"]
+    menu = [ "Generate Certificate", "Generate Certificate for PreTST and TST", "Home", "View Statistics"]
     choice = st.sidebar.selectbox("Menu", menu)
 
     if choice == "Home":
@@ -120,7 +120,7 @@ def main():
         st.subheader("Generate Certificate")
         student_name = st.selectbox("Select the name of the student: ", sorted(data['Name of Students'].unique()))
 
-        certificate_type = st.selectbox("Select certificate type", ["DMO", "NMO", "Pre-TST", "TST"])
+        certificate_type = st.selectbox("Select certificate type", ["DMO", "NMO"])
         if st.button("Generate"):
             if certificate_type == "DMO":
                 image_bytes = generate_certificate(student_name, "COMIC.TTF",
@@ -128,12 +128,7 @@ def main():
             elif certificate_type == "NMO":
                 image_bytes = generate_nmo_certificate(student_name, "COMIC.TTF",
                                                        "./for_certificates/certificate for NMO.png")
-            elif certificate_type=="Pre-TST":
-                image_bytes = generate_top100_certificate(student_name, "COMIC.TTF",
-                                                       "./for_certificates/certificate for pretst.png")
-            elif certificate_type=="TST":
-                image_bytes = generate_top25_certificate(student_name, "COMIC.TTF",
-                                                       "./for_certificates/TST round certificate.png")
+
 
             if image_bytes is not None:
                 st.image(image_bytes, caption='Generated certificate')
@@ -144,7 +139,25 @@ def main():
                     mime='image/png'
                 )
 
+    elif choice == "Generate Certificate for PreTST and TST":
+        st.subheader("Generate Certificate for PreTST and TST")
+        student_name = st.selectbox("Select the name of the student: ", sorted(top100['Name of Students'].unique()))
 
+        if certificate_type == "Pre-TST":
+            image_bytes = generate_top100_certificate(student_name, "COMIC.TTF",
+                                                  "./for_certificates/certificate for pretst.png")
+        elif certificate_type == "TST":
+            image_bytes = generate_top25_certificate(student_name, "COMIC.TTF",
+                                                 "./for_certificates/TST round certificate.png")
+
+        if image_bytes is not None:
+            st.image(image_bytes, caption='Generated certificate')
+            st.download_button(
+                "Download Certificate",
+                data=image_bytes,
+                file_name=f'{student_name}_certificate.png',
+                mime='image/png'
+            )
     elif choice == "View Statistics":
         st.subheader("View Statistics")
         if st.button("Show Distribution"):
