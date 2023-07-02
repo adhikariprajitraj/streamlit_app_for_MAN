@@ -20,6 +20,7 @@ top100 = pd.read_csv("./NMO_result/top100.csv")
 dmo_dict = dict(zip(data['Name of Students'], data['Registration No.']))
 top25_dict = dict(zip(top25['Name of Students'], data['Registration No.']))
 top100_dict = dict(zip(top100['Name of Students'], data['Registration No.']))
+dict_for_pretst = dict(zip(top100['Name of Students'], igo_data['Registration No.']))
 
 def generate_certificate(name, font_path, certificate_path):
     name = name.title()
@@ -69,7 +70,7 @@ def generate_nmo_certificate(name, font_path, certificate_path):
 def generate_top100_certificate(name, font_path, certificate_path):
     name = name.title()
     if name in top100_dict:
-        symbol_no = str(dictionary_for_certificates[name])
+        symbol_no = str(dict_for_pretst[name])
         image = Image.open(certificate_path)
         draw = ImageDraw.Draw(image)
         font1 = ImageFont.truetype(font_path, 150)
@@ -87,7 +88,7 @@ def generate_top100_certificate(name, font_path, certificate_path):
 def generate_top25_certificate(name, font_path, certificate_path):
     name = name.title()
     if name in top25_dict:
-        symbol_no = str(dictionary_for_certificates[name])
+        symbol_no = str(dict_for_pretst[name])
         image = Image.open(certificate_path)
         draw = ImageDraw.Draw(image)
         font1 = ImageFont.truetype(font_path, 150)
