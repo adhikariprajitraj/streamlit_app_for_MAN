@@ -142,7 +142,7 @@ def main():
     elif choice == "Generate Certificate for PreTST and TST":
         st.subheader("Generate Certificate for PreTST and TST")
         student_name = st.selectbox("Select the name of the student: ", sorted(top100['Name of Students'].unique()))
-        certificate_type = st.selectbox("Select certificate type", ["PreTst", "TST"])
+        certificate_type = st.selectbox("Select certificate type", ["Pre-TST", "TST"])
         if st.button("Generate"):
             if certificate_type == "Pre-TST":
                 image_bytes = generate_top100_certificate(student_name, "COMIC.TTF",
