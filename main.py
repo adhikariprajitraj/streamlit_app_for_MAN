@@ -116,7 +116,16 @@ def main():
 
     if choice == "Home":
         st.subheader("Home")
-        st.write("Welcome to the Student Certificate Generator and Stats Viewer. Please select an action from the sidebar.")
+        st.write("Welcome to the Student Certificate Generator and Stats Viewer. Please select an action from the sidebar. "
+                 "Please find your registration/symbol number here.")
+        student_name = st.selectbox("Select the name of the student(your symbol number will only show up if you were in "
+                                    "the top 100): ", sorted(top100['Name of Students']))
+        if st.button("Show Registration/Symbol Number"):
+            if student_name in dmo_dict:
+                st.write(f"Registration/Symbol Number of {student_name} is {dmo_dict[student_name]}")
+            else:
+                st.error(f"{student_name} is not in the list of students.")
+
     elif choice == "Generate Certificate":
         st.subheader("Generate Certificate")
         student_name = st.selectbox("Select the name of the student: ", sorted(data['Name of Students'].unique()))
