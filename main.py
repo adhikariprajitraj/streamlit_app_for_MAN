@@ -111,7 +111,7 @@ def show_stats():
 def main():
     st.title("Student Certificate Generator and Stats Viewer")
 
-    menu = [ "Home","Generate Certificate", "Generate Certificate for PreTST and TST", "View Statistics"]
+    menu = [ "Home", "Generate Certificate", "Generate Certificate for PreTST and TST", "View Statistics"]
     choice = st.sidebar.selectbox("Menu", menu)
 
     if choice == "Home":
@@ -122,7 +122,7 @@ def main():
                                     "the top 100): ", sorted(top100['Name of Students']))
         if st.button("Show Registration/Symbol Number"):
             if student_name in dmo_dict:
-                st.write(f"Registration/Symbol Number of {student_name} is {dmo_dict[student_name]}")
+                st.write(f"Registration/Symbol Number of {student_name} is {top100_dict[student_name]}")
             else:
                 st.error(f"{student_name} is not in the list of students.")
 
