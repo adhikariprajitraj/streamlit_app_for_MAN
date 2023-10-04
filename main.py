@@ -111,7 +111,7 @@ def show_stats():
 def main():
     st.title("Student Certificate Generator and Stats Viewer")
 
-    menu = [ "Generate Certificate", "Generate Certificate for PreTST and TST", "Home", "View Statistics"]
+    menu = [ "Home","Generate Certificate", "Generate Certificate for PreTST and TST", "View Statistics"]
     choice = st.sidebar.selectbox("Menu", menu)
 
     if choice == "Home":
