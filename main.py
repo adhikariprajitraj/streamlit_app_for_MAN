@@ -111,7 +111,7 @@ def show_stats():
 def main():
     st.title("Student Certificate Generator and Stats Viewer for IMO 2023 Japan (2024 IMO Updating soon)")
 
-    menu = [ "Home", "Generate Certificate", "Generate Certificate for PreTST and TST", "View Statistics"]
+    menu = [ "Home", "Generate Certificate for DMO and NMO (Now PMO)", "Generate Certificate for PreTST and TST", "View Statistics"]
     choice = st.sidebar.selectbox("Menu", menu)
 
     if choice == "Home":
