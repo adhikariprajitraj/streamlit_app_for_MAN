@@ -109,7 +109,7 @@ def show_stats():
                    f'**Max: ** {np.max(score)} \n **Min:** {np.min(score)}')
 
 def main():
-    st.title("Student Certificate Generator and Stats Viewer")
+    st.title("Student Certificate Generator and Stats Viewer for IMO 2023 Japan (2024 IMO Updating soon)")
 
     menu = [ "Home", "Generate Certificate", "Generate Certificate for PreTST and TST", "View Statistics"]
     choice = st.sidebar.selectbox("Menu", menu)
