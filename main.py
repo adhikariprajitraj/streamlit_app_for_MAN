@@ -120,7 +120,7 @@ def main():
                  "Please find your registration/symbol number here.")
 
 
-    elif choice == "Generate Certificate":
+    elif choice == "Generate Certificate for DMO and NMO (Now PMO)":
         st.subheader("Generate Certificate")
         student_name = st.selectbox("Select the name of the student: ", sorted(data['Name of Students'].unique()))
 
