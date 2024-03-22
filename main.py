@@ -189,8 +189,11 @@ def main():
 
     if choice == "Generate Certificate for 2024 contests":
         st.subheader("Generate Certificate for 2024")
-        st.write("Please select the name of the student and the type of certificate you want to generate.")
-        student_name = st.selectbox("Select the name of the student: ", sorted(dmo_2024['Name']))
+        st.write("Please select the name of the student and the type of certificate you want to generate. To generate "
+                 "a certificate for NMO, you need to select the name of the student who participated in the last year's NMO."
+                 "Please note that the name of the student should be the same as the one in the list. Also, for DMO and "
+                 "PMO, select the name of the student from the list from the PMO name list.")
+        student_name = st.selectbox("Select the name of the student(For DMO and PMO): ", sorted(dmo_2024['Name']))
         last_year_student_name = st.selectbox("Select the name for NMO: ", sorted(nmo_2024['Name']))
         certificate_type = st.selectbox("Select certificate type", ["DMO", "PMO", "NMO"])
         if st.button("Generate"):
