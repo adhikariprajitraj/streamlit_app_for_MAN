@@ -195,7 +195,7 @@ def main():
                     mime='image/png'
                 )
 
-    elif choice == "Generate Certificate for 2024":
+    elif choice == "Generate Certificate for 2024 contests":
         st.subheader("Generate Certificate for 2024")
         st.write("Please select the name of the student and the type of certificate you want to generate.")
         student_name = st.selectbox("Select the name of the student: ", sorted(dmo_2024['Name']))
