@@ -191,6 +191,7 @@ def main():
         st.subheader("Generate Certificate for 2024")
         st.write("Please select the name of the student and the type of certificate you want to generate.")
         student_name = st.selectbox("Select the name of the student: ", sorted(dmo_2024['Name']))
+        last_year_student_name = st.selectbox("Select the name for NMO: ", sorted(dict_nmo_2024['Name']))
         certificate_type = st.selectbox("Select certificate type", ["DMO", "PMO", "NMO"])
         if st.button("Generate"):
             if certificate_type == "DMO":
@@ -200,10 +201,16 @@ def main():
                 if student_name in dict_pmo_2024:
                     image_bytes = generate_pmo_certificate(student_name, "COMIC.TTF",
                                                    "./2024_certificates/certificate for PMO.png")
+                else:
+                    st.error(f"{student_name} is not in the list of students.")
+                    return None
             elif certificate_type == "NMO":
-                if student_name in dict_nmo_2024:
-                    image_bytes = generate_nmo2024_certificate(student_name, "COMIC.TTF",
+                if student_name in dict_nmo_2024 or last_year_student_name in dict_nmo_2024:
+                    image_bytes = generate_nmo2024_certificate(last_year_student_name, "COMIC.TTF",
                                                        "./2024_certificates/certificate for NMO.png")
+                else:
+                    st.error(f"{student_name} is not in the list of students.")
+                    return None
 
             if image_bytes is not None:
                 st.image(image_bytes, caption='Generated certificate')
