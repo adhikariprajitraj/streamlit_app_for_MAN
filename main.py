@@ -160,10 +160,10 @@ def show_stats():
                    f'**Max: ** {np.max(score)} \n **Min:** {np.min(score)}')
 
 def main():
-    image_bytes = io.BytesIO()
+    # image_bytes = io.BytesIO()
     st.title("Student Certificate Generator and Stats Viewer for IMO 2023 Japan (2024 IMO Updating soon)")
 
-    menu = [ "Home", "Generate Certificate for 2024 contests","Generate Certificate for DMO and NMO",
+    menu = [ "Home", "Generate Certificate for 2024 contests",
              "Generate Certificate for PreTST and TST", "View Statistics"]
     choice = st.sidebar.selectbox("Menu", menu)
 
@@ -197,6 +197,7 @@ def main():
 
     elif choice == "Generate Certificate for 2024":
         st.subheader("Generate Certificate for 2024")
+        st.write("Please select the name of the student and the type of certificate you want to generate.")
         student_name = st.selectbox("Select the name of the student: ", sorted(dmo_2024['Name']))
         certificate_type = st.selectbox("Select certificate type", ["DMO", "PMO", "NMO"])
         if st.button("Generate"):
