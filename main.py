@@ -145,7 +145,7 @@ def generate_nmo2024_certificate(name, font_path, certificate_path):
         draw = ImageDraw.Draw(image)
         font1 = ImageFont.truetype(font_path, 150)
         font2 = ImageFont.truetype(font_path, 70)
-        draw.text((750, 710), symbol_no, font=font2, fill=(0,0,0))
+        draw.text((730, 710), symbol_no, font=font2, fill=(0,0,0))
         draw.text((690, 1150), name, font=font1, fill=(0,0,0))
         image_bytes = io.BytesIO()
         image.save(image_bytes, 'PNG')
