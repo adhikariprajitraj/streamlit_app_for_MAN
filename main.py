@@ -205,10 +205,12 @@ def main():
                 image_bytes = generate_certificate(student_name, "COMIC.TTF",
                                                    "./2024_certificates/certificate for DMO.png")
             elif certificate_type == "PMO":
-                image_bytes = generate_pmo_certificate(student_name, "COMIC.TTF",
+                if student_name in dict_pmo_2024:
+                    image_bytes = generate_pmo_certificate(student_name, "COMIC.TTF",
                                                    "./2024_certificates/certificate for PMO.png")
             elif certificate_type == "NMO":
-                image_bytes = generate_nmo2024_certificate(student_name, "COMIC.TTF",
+                if student_name in dict_nmo_2024:
+                    image_bytes = generate_nmo2024_certificate(student_name, "COMIC.TTF",
                                                        "./2024_certificates/certificate for NMO.png")
 
             if image_bytes is not None:
