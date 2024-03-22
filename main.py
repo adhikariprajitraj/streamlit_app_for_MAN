@@ -35,6 +35,7 @@ dict_dmo_2024 = convert_to_dict(dmo_2024)
 dict_pmo_2024 = convert_to_dict(pmo_2024)
 dict_nmo_2024 = convert_to_dict(nmo_2024)
 
+print(dict_dmo_2024)
 
 ## FUNCTIONS ##
 def generate_certificate(name, font_path, certificate_path):
@@ -102,7 +103,7 @@ def generate_top100_certificate(name, font_path, certificate_path):
 
 def generate_pmo_certificate(name, font_path, certificate_path):
     name = name.title()
-    if name in dict_pmo_2024['Name']:
+    if name in dict_pmo_2024:
         symbol_no = str(dict_for_pretst[name])
         image = Image.open(certificate_path)
         draw = ImageDraw.Draw(image)
@@ -120,7 +121,7 @@ def generate_pmo_certificate(name, font_path, certificate_path):
 
 def generate_dmo2024_certificate(name, font_path, certificate_path):
     name = name.title()
-    if name in dict_dmo_2024['Name']:
+    if name in dict_dmo_2024:
         symbol_no = str(dict_dmo_2024[name])
         image = Image.open(certificate_path)
         draw = ImageDraw.Draw(image)
@@ -138,7 +139,7 @@ def generate_dmo2024_certificate(name, font_path, certificate_path):
 
 def generate_nmo2024_certificate(name, font_path, certificate_path):
     name = name.title()
-    if name in dict_nmo_2024['Name']:
+    if name in dict_nmo_2024:
         symbol_no = str(dict_nmo_2024[name])
         image = Image.open(certificate_path)
         draw = ImageDraw.Draw(image)
@@ -223,11 +224,11 @@ def main():
                 image_bytes = generate_dmo2024_certificate(student_name, "COMIC.TTF",
                                                    "./2024_certificates/certificate for DMO.png")
             elif certificate_type == "PMO":
-                if student_name in dict_pmo_2024['Name']:
+                if student_name in dict_pmo_2024:
                     image_bytes = generate_pmo_certificate(student_name, "COMIC.TTF",
                                                    "./2024_certificates/certificate for PMO.png")
             elif certificate_type == "NMO":
-                if student_name in dict_nmo_2024['Name']:
+                if student_name in dict_nmo_2024:
                     image_bytes = generate_nmo2024_certificate(student_name, "COMIC.TTF",
                                                        "./2024_certificates/certificate for NMO.png")
 
