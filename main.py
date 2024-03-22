@@ -160,7 +160,7 @@ def show_stats():
                    f'**Max: ** {np.max(score)} \n **Min:** {np.min(score)}')
 
 def main():
-    # image_bytes = io.BytesIO()
+    image_bytes = io.BytesIO()
     st.title("Student Certificate Generator and Stats Viewer for IMO 2023 and 2024")
 
     menu = [ "Home", "Generate Certificate for 2024 contests",
