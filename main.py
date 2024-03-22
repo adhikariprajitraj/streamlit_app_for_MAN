@@ -163,7 +163,7 @@ def main():
     image_bytes = io.BytesIO()
     st.title("Student Certificate Generator and Stats Viewer for IMO 2023 Japan (2024 IMO Updating soon)")
 
-    menu = [ "Home", "Generate Certificate for 2024",
+    menu = [ "Home", "Generate Certificate for 2024 contests","Generate Certificate for DMO and NMO",
              "Generate Certificate for PreTST and TST", "View Statistics"]
     choice = st.sidebar.selectbox("Menu", menu)
 
