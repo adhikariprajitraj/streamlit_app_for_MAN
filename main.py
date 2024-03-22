@@ -104,7 +104,7 @@ def generate_top100_certificate(name, font_path, certificate_path):
 def generate_pmo_certificate(name, font_path, certificate_path):
     name = name.title()
     if name in dict_pmo_2024:
-        symbol_no = str(dict_for_pretst[name])
+        symbol_no = str(dict_pmo_2024[name])
         image = Image.open(certificate_path)
         draw = ImageDraw.Draw(image)
         font1 = ImageFont.truetype(font_path, 150)
@@ -186,7 +186,35 @@ def main():
               "Generate Certificate for PreTST and TST", "View Statistics"]
     choice = st.sidebar.selectbox("Menu", menu)
 
-    if choice == "Home":
+
+    if choice == "Generate Certificate for 2024 contests":
+        st.subheader("Generate Certificate for 2024")
+        st.write("Please select the name of the student and the type of certificate you want to generate.")
+        student_name = st.selectbox("Select the name of the student: ", sorted(dmo_2024['Name']))
+        certificate_type = st.selectbox("Select certificate type", ["DMO", "PMO", "NMO"])
+        if st.button("Generate"):
+            if certificate_type == "DMO":
+                image_bytes = generate_dmo2024_certificate(student_name, "COMIC.TTF",
+                                                   "./2024_certificates/certificate for DMO.png")
+            elif certificate_type == "PMO":
+                if student_name in dict_pmo_2024:
+                    image_bytes = generate_pmo_certificate(student_name, "COMIC.TTF",
+                                                   "./2024_certificates/certificate for PMO.png")
+            elif certificate_type == "NMO":
+                if student_name in dict_nmo_2024:
+                    image_bytes = generate_nmo2024_certificate(student_name, "COMIC.TTF",
+                                                       "./2024_certificates/certificate for NMO.png")
+
+            if image_bytes is not None:
+                st.image(image_bytes, caption='Generated certificate')
+                st.download_button(
+                    "Download Certificate",
+                    data=image_bytes,
+                    file_name=f'{student_name}_certificate.png',
+                    mime='image/png'
+                )
+
+    elif choice == "Home":
         st.subheader("Home")
         st.write("Welcome to the Student Certificate Generator and Stats Viewer. Please select an action from the sidebar. "
                  "Please find your registration/symbol number here.")
@@ -214,32 +242,7 @@ def main():
                     mime='image/png'
                 )
 
-    elif choice == "Generate Certificate for 2024 contests":
-        st.subheader("Generate Certificate for 2024")
-        st.write("Please select the name of the student and the type of certificate you want to generate.")
-        student_name = st.selectbox("Select the name of the student: ", sorted(dmo_2024['Name']))
-        certificate_type = st.selectbox("Select certificate type", ["DMO", "PMO", "NMO"])
-        if st.button("Generate"):
-            if certificate_type == "DMO":
-                image_bytes = generate_dmo2024_certificate(student_name, "COMIC.TTF",
-                                                   "./2024_certificates/certificate for DMO.png")
-            elif certificate_type == "PMO":
-                if student_name in dict_pmo_2024:
-                    image_bytes = generate_pmo_certificate(student_name, "COMIC.TTF",
-                                                   "./2024_certificates/certificate for PMO.png")
-            elif certificate_type == "NMO":
-                if student_name in dict_nmo_2024:
-                    image_bytes = generate_nmo2024_certificate(student_name, "COMIC.TTF",
-                                                       "./2024_certificates/certificate for NMO.png")
 
-            if image_bytes is not None:
-                st.image(image_bytes, caption='Generated certificate')
-                st.download_button(
-                    "Download Certificate",
-                    data=image_bytes,
-                    file_name=f'{student_name}_certificate.png',
-                    mime='image/png'
-                )
 
     elif choice == "Generate Certificate for PreTST and TST":
         st.subheader("Generate Certificate for PreTST and TST")
