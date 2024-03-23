@@ -10,6 +10,13 @@
             </Attribute>
           </value>
         </entry>
+        <entry key="/2024 result/NMO-2024.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
         <entry key="/2024 result/PMO-2024.csv">
           <value>
             <Attribute>
