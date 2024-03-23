@@ -198,8 +198,12 @@ def main():
         certificate_type = st.selectbox("Select certificate type", ["DMO", "PMO", "NMO"])
         if st.button("Generate"):
             if certificate_type == "DMO":
-                image_bytes = generate_dmo2024_certificate(student_name, "COMIC.TTF",
+                if student_name in dict_dmo_2024:
+                    image_bytes = generate_dmo2024_certificate(student_name, "COMIC.TTF",
                                                    "./2024_certificates/certificate for DMO.png")
+                else:
+                    st.error(f"{student_name} is not in the list of students.")
+                    return None
             elif certificate_type == "PMO":
                 if student_name in dict_pmo_2024:
                     image_bytes = generate_pmo_certificate(student_name, "COMIC.TTF",
