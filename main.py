@@ -233,6 +233,8 @@ def main():
                                     and PMO): """, sorted(dmo_2024['Name']))
         last_year_student_name = st.selectbox("Select the name for NMO: ",
                                               sorted(nmo_2024['Name']))
+        tst_2024_student_name = st.selectbox("Select the name for TST: ",
+                                             sorted(tst_2024['Name']))
         certificate_type = st.selectbox("Select certificate type", ["DMO",
                                         "PMO", "NMO", "TST"])
         if st.button("Generate"):
@@ -256,7 +258,7 @@ def main():
                     return None
             elif certificate_type == "TST":
                 if student_name in dict_tst_2024:
-                    image_bytes = generate_tst2024_certificate(student_name, "COMIC.TTF",
+                    image_bytes = generate_tst2024_certificate(tst_2024_student_name, "COMIC.TTF",
                                                        "./2024_certificates/TST round certificate.png")
                 else:
                     st.error(f"{student_name} is not in the list of students.")
