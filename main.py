@@ -177,10 +177,10 @@ def generate_tst2024_certificate(name, font_path, certificate_path):
         font2 = ImageFont.truetype(font_path, 70)
         draw.text((650, 710), symbol_no, font=font2, fill=(0, 0, 0))
         # if name is longer than 20 characters, reduce the font size
-        if len(name) > 20:
+        if len(name) > 18:
             font1 = ImageFont.truetype(font_path, 130)
             # change x coordinate to 650
-            draw.text((650, 1150), name, font=font1, fill=(0, 0, 0))
+            draw.text((620, 1150), name, font=font1, fill=(0, 0, 0))
         else:
             draw.text((690, 1150), name, font=font1, fill=(0, 0, 0))
         image_bytes = io.BytesIO()
