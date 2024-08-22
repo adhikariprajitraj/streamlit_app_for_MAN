@@ -227,7 +227,7 @@ def main():
     choice = st.sidebar.selectbox("Menu", menu)
 
     if choice == "Generate Certificate for 2024 contests":
-        st.subheader("Generate Certificate for 2024")
+        st.subheader("Generate Certificate for 2024 IMO")
         st.write("""Please select the name of the student and the type of
                 certificate you want to generate. To generate a certificate
                 for NMO, you need to select the name of the student who
