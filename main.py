@@ -35,12 +35,14 @@ dict_for_pretst = dict(zip(top100['Name of Students'],
 dmo_2024 = pd.read_csv('./2024 result/DMO-2024.csv')
 pmo_2024 = pd.read_csv('./2024 result/PMO-2024.csv')
 nmo_2024 = pd.read_csv('./2024 result/NMO-2024.csv')
+tst_2024 = pd.read_csv('./2024 result/TST-2024.csv')    
 
 dict_dmo_2024 = convert_to_dict(dmo_2024)
 dict_pmo_2024 = convert_to_dict(pmo_2024)
 dict_nmo_2024 = convert_to_dict(nmo_2024)
+dict_tst_2024 = convert_to_dict(tst_2024)
 
-print(dict_dmo_2024)
+print(dict_tst_2024)
 
 # FUNCTIONS ##
 
@@ -165,6 +167,24 @@ def generate_nmo2024_certificate(name, font_path, certificate_path):
         st.error(f"{name} is not in the list of students.")
         return None
 
+def generate_tst2024_certificate(name, font_path, certificate_path):
+    name = name.title()
+    if name in dict_tst_2024:
+        symbol_no = str(dict_tst_2024[name])
+        image = Image.open(certificate_path)
+        draw = ImageDraw.Draw(image)
+        font1 = ImageFont.truetype(font_path, 150)
+        font2 = ImageFont.truetype(font_path, 70)
+        draw.text((650, 710), symbol_no, font=font2, fill=(0, 0, 0))
+        draw.text((690, 1150), name, font=font1, fill=(0, 0, 0))
+        image_bytes = io.BytesIO()
+        image.save(image_bytes, 'PNG')
+        image_bytes.seek(0)
+        return image_bytes
+    else:
+        st.error(f"{name} is not in the list of students.")
+        return None
+
 
 def generate_top25_certificate(name, font_path, certificate_path):
     name = name.title()
@@ -214,7 +234,7 @@ def main():
         last_year_student_name = st.selectbox("Select the name for NMO: ",
                                               sorted(nmo_2024['Name']))
         certificate_type = st.selectbox("Select certificate type", ["DMO",
-                                        "PMO", "NMO"])
+                                        "PMO", "NMO", "TST"])
         if st.button("Generate"):
             if certificate_type == "DMO":
                 image_bytes = generate_dmo2024_certificate(student_name,
@@ -231,6 +251,13 @@ def main():
                 if student_name in dict_nmo_2024 or last_year_student_name in dict_nmo_2024:
                     image_bytes = generate_nmo2024_certificate(last_year_student_name, "COMIC.TTF",
                                                        "./2024_certificates/certificate for NMO.png")
+                else:
+                    st.error(f"{student_name} is not in the list of students.")
+                    return None
+            elif certificate_type == "TST":
+                if student_name in dict_tst_2024:
+                    image_bytes = generate_tst2024_certificate(student_name, "COMIC.TTF",
+                                                       "./2024_certificates/TST round certificate.png")
                 else:
                     st.error(f"{student_name} is not in the list of students.")
                     return None
