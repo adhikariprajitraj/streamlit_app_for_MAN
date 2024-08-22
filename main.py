@@ -259,7 +259,7 @@ def main():
             elif certificate_type == "TST":
                 if tst_2024_student_name in dict_tst_2024:
                     image_bytes = generate_tst2024_certificate(tst_2024_student_name, "COMIC.TTF",
-                                                       "./2024_certificates/TST round certificate.png")
+                                                       "./2024_certificates/certificate for TST.png")
                 else:
                     st.error(f"{tst_2024_student_name} is not in the list of students.")
                     return None
