@@ -304,14 +304,14 @@ def main():
                     mime='image/png'
                 )
 
-    elif choice == "Generate Certificate for PreTST and TST":
+    elif choice == "Generate Certificate for PreTST and TST for 2023 IMO":
         st.subheader("Generate Certificate for PreTST and TST")
         student_name = st.selectbox("Select the name of the student: ", sorted(top100['Name of Students']))
         certificate_type = st.selectbox("Select certificate type", ["Pre-TST", "TST"])
         if st.button("Generate"):
             if certificate_type == "Pre-TST":
                 image_bytes = generate_top100_certificate(student_name, "COMIC.TTF",
-                                                  "./for_certificates/certificate for pretst.png")
+                                                  "./for_certificates/pretst2023.png")
             elif certificate_type == "TST":
                 image_bytes = generate_top25_certificate(student_name, "COMIC.TTF",
                                                  "./for_certificates/TST round certificate.png")
