@@ -224,7 +224,7 @@ def main():
     By Prajit Adhikari""")
 
     menu = ["Generate Certificate for 2024 contests", "Home",
-            "Generate Certificate for PreTST and TST", "View Statistics"]
+            "Generate Certificate for PreTST and TST for 2023 IMO", "View Statistics"]
     choice = st.sidebar.selectbox("Menu", menu)
 
     if choice == "Generate Certificate for 2024 contests":
@@ -305,7 +305,7 @@ def main():
                 )
 
     elif choice == "Generate Certificate for PreTST and TST for 2023 IMO":
-        st.subheader("Generate Certificate for PreTST and TST")
+        st.subheader("Generate Certificate for PreTST and TST 2023 IMO")
         student_name = st.selectbox("Select the name of the student: ", sorted(top100['Name of Students']))
         certificate_type = st.selectbox("Select certificate type", ["Pre-TST", "TST"])
         if st.button("Generate"):
