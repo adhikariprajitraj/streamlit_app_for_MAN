@@ -94,7 +94,7 @@ def generate_nmo_certificate(name, font_path, certificate_path):
 
 def generate_top100_certificate(name, font_path, certificate_path):
     name = name.title()
-    if name in top100_dict['Name of Students']:
+    if name in top100_dict:
         symbol_no = str(dict_for_pretst[name])
         image = Image.open(certificate_path)
         draw = ImageDraw.Draw(image)
@@ -166,6 +166,7 @@ def generate_nmo2024_certificate(name, font_path, certificate_path):
     else:
         st.error(f"{name} is not in the list of students.")
         return None
+
 
 def generate_tst2024_certificate(name, font_path, certificate_path):
     name = name.title()
