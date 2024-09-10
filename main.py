@@ -35,7 +35,7 @@ dict_for_pretst = dict(zip(top100['Name of Students'],
 dmo_2024 = pd.read_csv('./2024 result/DMO-2024.csv')
 pmo_2024 = pd.read_csv('./2024 result/PMO-2024.csv')
 nmo_2024 = pd.read_csv('./2024 result/NMO-2024.csv')
-tst_2024 = pd.read_csv('./2024 result/TST-2024.csv')    
+tst_2024 = pd.read_csv('./2024 result/TST-2024.csv')
 
 dict_dmo_2024 = convert_to_dict(dmo_2024)
 dict_pmo_2024 = convert_to_dict(pmo_2024)
