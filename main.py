@@ -273,10 +273,20 @@ def main():
 
             if image_bytes is not None:
                 st.image(image_bytes, caption='Generated certificate')
+                # Use the correct name variable depending on the certificate type
+                if certificate_type == "DMO":
+                    download_name = student_name
+                elif certificate_type == "PMO":
+                    download_name = student_name
+                elif certificate_type == "NMO":
+                    download_name = last_year_student_name
+                elif certificate_type == "TST":
+                    download_name = tst_2024_student_name
+                
                 st.download_button(
                     "Download Certificate",
                     data=image_bytes,
-                    file_name=f'{student_name}_certificate.png',
+                    file_name=f'{download_name}_{certificate_type}_2024_certificate.png',
                     mime='image/png'
                 )
 
@@ -300,7 +310,7 @@ def main():
                 st.download_button(
                     "Download Certificate",
                     data=image_bytes,
-                    file_name=f'{student_name}_certificate.png',
+                    file_name=f'{student_name}_{certificate_type}_2023_certificate.png',
                     mime='image/png'
                 )
 
@@ -321,7 +331,7 @@ def main():
             st.download_button(
                 "Download Certificate",
                 data=image_bytes,
-                file_name=f'{student_name}_certificate.png',
+                file_name=f'{student_name}_{certificate_type}_2023_certificate.png',
                 mime='image/png'
             )
     elif choice == "View Statistics":
