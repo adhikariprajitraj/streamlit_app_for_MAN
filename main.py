@@ -14,49 +14,40 @@ def convert_to_dict(df):
 # DATA ##
 
 
-data = pd.read_csv('./MAN/final/DMO_final_score.csv')
-score = data['Score']
-sorted_score = sorted(score)
-# igo_data = pd.read_csv("./IGO/IGO scores.csv")
-nmo = pd.read_csv("./NMO_result/NMO-Result.csv")
-dictionary_for_certificates = dict(zip(nmo['Name of Students'],
-                                       nmo['Registration No.']))
-# Corrected indentation
-top25 = pd.read_csv("./NMO_result/top25.csv")
-top100 = pd.read_csv("./NMO_result/top100.csv")
-dmo_dict = dict(zip(data['Name of Students'], data['Registration No.']))
-top25_dict = dict(zip(top25['Name of Students'], data['Registration No.']))
-top100_dict = dict(zip(top100['Name of Students'], data['Registration No.']))
-dict_for_pretst = dict(zip(top100['Name of Students'],
-                           top100['Registration No.']))
+def load_data():
+    data = pd.read_csv('./MAN/final/DMO_final_score.csv')
+    nmo = pd.read_csv("./NMO_result/NMO-Result.csv")
+    top25 = pd.read_csv("./NMO_result/top25.csv")
+    top100 = pd.read_csv("./NMO_result/top100.csv")
+    dmo_2024 = pd.read_csv('./2024 result/DMO-2024.csv')
+    pmo_2024 = pd.read_csv('./2024 result/PMO-2024.csv')
+    nmo_2024 = pd.read_csv('./2024 result/NMO-2024.csv')
+    tst_2024 = pd.read_csv('./2024 result/TST-2024.csv')
+    return data, nmo, top25, top100, dmo_2024, pmo_2024, nmo_2024, tst_2024
 
 
-# 2024 data
-dmo_2024 = pd.read_csv('./2024 result/DMO-2024.csv')
-pmo_2024 = pd.read_csv('./2024 result/PMO-2024.csv')
-nmo_2024 = pd.read_csv('./2024 result/NMO-2024.csv')
-tst_2024 = pd.read_csv('./2024 result/TST-2024.csv')
-
-dict_dmo_2024 = convert_to_dict(dmo_2024)
-dict_pmo_2024 = convert_to_dict(pmo_2024)
-dict_nmo_2024 = convert_to_dict(nmo_2024)
-dict_tst_2024 = convert_to_dict(tst_2024)
-
-print(dict_tst_2024)
-
-# FUNCTIONS ##
+def create_dicts(data, nmo, top25, top100, dmo_2024, pmo_2024, nmo_2024, tst_2024):
+    dmo_dict = convert_to_dict(data)
+    dictionary_for_certificates = convert_to_dict(nmo)
+    top25_dict = convert_to_dict(top25)
+    top100_dict = convert_to_dict(top100)
+    dict_dmo_2024 = convert_to_dict(dmo_2024)
+    dict_pmo_2024 = convert_to_dict(pmo_2024)
+    dict_nmo_2024 = convert_to_dict(nmo_2024)
+    dict_tst_2024 = convert_to_dict(tst_2024)
+    return dmo_dict, dictionary_for_certificates, top25_dict, top100_dict, dict_dmo_2024, dict_pmo_2024, dict_nmo_2024, dict_tst_2024
 
 
-def generate_certificate(name, font_path, certificate_path):
+def generate_certificate(name, font_path, certificate_path, student_dict, x_name, y_name, x_symbol, y_symbol):
     name = name.title()
-    if name in dmo_dict:
+    if name in student_dict:
         image = Image.open(certificate_path)
-        symbol_no = str(dmo_dict[name])
+        symbol_no = str(student_dict[name])
         draw = ImageDraw.Draw(image)
         font1 = ImageFont.truetype(font_path, 150)
         font2 = ImageFont.truetype(font_path, 70)
-        draw.text((600, 1100), name, font=font1, fill=(0, 0, 0))
-        draw.text((750, 710), symbol_no, font=font2, fill=(0, 0, 0))
+        draw.text((x_name, y_name), name, font=font1, fill=(0, 0, 0))
+        draw.text((x_symbol, y_symbol), symbol_no, font=font2, fill=(0, 0, 0))
         image_bytes = io.BytesIO()
         image.save(image_bytes, 'PNG')
         image_bytes.seek(0)
@@ -66,223 +57,48 @@ def generate_certificate(name, font_path, certificate_path):
         return None
 
 
-def plot_distribution():
+def plot_distribution(score):
     sns.histplot(score, stat='density', color='#44eecc')
     plt.savefig(fname='plot')
     st.image('plot.png')
     os.remove('plot.png')
 
 
-def generate_nmo_certificate(name, font_path, certificate_path):
-    name = name.title()
-    if name in dictionary_for_certificates:
-        symbol_no = str(dictionary_for_certificates[name])
-        image = Image.open(certificate_path)
-        draw = ImageDraw.Draw(image)
-        font1 = ImageFont.truetype(font_path, 150)
-        font2 = ImageFont.truetype(font_path, 70)
-        draw.text((750, 710), symbol_no, font=font2, fill=(0, 0, 0))
-        draw.text((690, 1150), name, font=font1, fill=(0, 0, 0))
-        image_bytes = io.BytesIO()
-        image.save(image_bytes, 'PNG')
-        image_bytes.seek(0)
-        return image_bytes
-    else:
-        st.error(f"{name} is not in the list of students.")
-        return None
-
-
-def generate_top100_certificate(name, font_path, certificate_path):
-    name = name.title()
-    if name in top100_dict:
-        symbol_no = str(dict_for_pretst[name])
-        image = Image.open(certificate_path)
-        draw = ImageDraw.Draw(image)
-        font1 = ImageFont.truetype(font_path, 150)
-        font2 = ImageFont.truetype(font_path, 70)
-        draw.text((750, 710), symbol_no, font=font2, fill=(0, 0, 0))
-        draw.text((690, 1150), name, font=font1, fill=(0, 0, 0))
-        image_bytes = io.BytesIO()
-        image.save(image_bytes, 'PNG')
-        image_bytes.seek(0)
-        return image_bytes
-    else:
-        st.error(f"{name} is not in the list of students.")
-        return None
-
-
-def generate_pmo_certificate(name, font_path, certificate_path):
-    name = name.title()
-    if name in dict_pmo_2024:
-        symbol_no = str(dict_pmo_2024[name])
-        image = Image.open(certificate_path)
-        draw = ImageDraw.Draw(image)
-        font1 = ImageFont.truetype(font_path, 150)
-        font2 = ImageFont.truetype(font_path, 70)
-        draw.text((650, 710), symbol_no, font=font2, fill=(0, 0, 0))
-        draw.text((690, 1150), name, font=font1, fill=(0, 0, 0))
-        image_bytes = io.BytesIO()
-        image.save(image_bytes, 'PNG')
-        image_bytes.seek(0)
-        return image_bytes
-    else:
-        st.error(f"{name} is not in the list of students.")
-        return None
-
-
-def generate_dmo2024_certificate(name, font_path, certificate_path):
-    name = name.title()
-    if name in dict_dmo_2024:
-        symbol_no = str(dict_dmo_2024[name])
-        image = Image.open(certificate_path)
-        draw = ImageDraw.Draw(image)
-        font1 = ImageFont.truetype(font_path, 150)
-        font2 = ImageFont.truetype(font_path, 70)
-        draw.text((600, 1100), name, font=font1, fill=(0, 0, 0))
-        draw.text((750, 710), symbol_no, font=font2, fill=(0, 0, 0))
-        image_bytes = io.BytesIO()
-        image.save(image_bytes, 'PNG')
-        image_bytes.seek(0)
-        return image_bytes
-    else:
-        st.error(f"{name} is not in the list of students.")
-        return None
-
-
-def generate_nmo2024_certificate(name, font_path, certificate_path):
-    name = name.title()
-    if name in dict_nmo_2024:
-        symbol_no = str(dict_nmo_2024[name])
-        image = Image.open(certificate_path)
-        draw = ImageDraw.Draw(image)
-        font1 = ImageFont.truetype(font_path, 150)
-        font2 = ImageFont.truetype(font_path, 70)
-        draw.text((650, 710), symbol_no, font=font2, fill=(0, 0, 0))
-        draw.text((690, 1150), name, font=font1, fill=(0, 0, 0))
-        image_bytes = io.BytesIO()
-        image.save(image_bytes, 'PNG')
-        image_bytes.seek(0)
-        return image_bytes
-    else:
-        st.error(f"{name} is not in the list of students.")
-        return None
-
-
-def generate_tst2024_certificate(name, font_path, certificate_path):
-    name = name.title()
-    if name in dict_tst_2024:
-        symbol_no = str(dict_tst_2024[name])
-        image = Image.open(certificate_path)
-        draw = ImageDraw.Draw(image)
-        font1 = ImageFont.truetype(font_path, 150)
-        font2 = ImageFont.truetype(font_path, 70)
-        draw.text((650, 710), symbol_no, font=font2, fill=(0, 0, 0))
-        # if name is longer than 20 characters, reduce the font size
-        if len(name) > 18:
-            font1 = ImageFont.truetype(font_path, 130)
-            # change x coordinate to 650
-            draw.text((620, 1150), name, font=font1, fill=(0, 0, 0))
-        else:
-            draw.text((690, 1150), name, font=font1, fill=(0, 0, 0))
-        image_bytes = io.BytesIO()
-        image.save(image_bytes, 'PNG')
-        image_bytes.seek(0)
-        return image_bytes
-    else:
-        st.error(f"{name} is not in the list of students.")
-        return None
-
-
-def generate_top25_certificate(name, font_path, certificate_path):
-    name = name.title()
-    if name in top25_dict:
-        symbol_no = str(dict_for_pretst[name])
-        image = Image.open(certificate_path)
-        draw = ImageDraw.Draw(image)
-        font1 = ImageFont.truetype(font_path, 150)
-        font2 = ImageFont.truetype(font_path, 70)
-        draw.text((750, 710), symbol_no, font=font2, fill=(0, 0, 0))
-        draw.text((690, 1150), name, font=font1, fill=(0, 0, 0))
-        image_bytes = io.BytesIO()
-        image.save(image_bytes, 'PNG')
-        image_bytes.seek(0)
-        return image_bytes
-    else:
-        st.error(f"{name} is not in the list of students.")
-        return None
-
-
-def show_stats():
+def show_stats(score):
     st.write(f'**Mean:**  {np.mean(score)}\n**Median:**  {np.median(score)}\n'
-                   f'**Standard Deviation:  **{np.std(score)}\n**Variance:**  {np.var(score)}\n'
-                   f'**Max: ** {np.max(score)} \n **Min:** {np.min(score)}')
+             f'**Standard Deviation:  **{np.std(score)}\n**Variance:**  {np.var(score)}\n'
+             f'**Max: ** {np.max(score)} \n **Min:** {np.min(score)}')
 
 
 def main():
-    image_bytes = io.BytesIO()
-    st.title("""Student Certificate Generator and Stats Viewer for IMO 2023 and 2024
-    By Prajit Adhikari""")
+    data, nmo, top25, top100, dmo_2024, pmo_2024, nmo_2024, tst_2024 = load_data()
+    score = data['Score']
+    dmo_dict, dictionary_for_certificates, top25_dict, top100_dict, dict_dmo_2024, dict_pmo_2024, dict_nmo_2024, dict_tst_2024 = create_dicts(data, nmo, top25, top100, dmo_2024, pmo_2024, nmo_2024, tst_2024)
 
-    menu = ["Generate Certificate for 2024 contests", "Home",
-            "Generate Certificate for PreTST and TST for 2023 IMO", "View Statistics"]
+    st.title("Student Certificate Generator and Stats Viewer for IMO 2023 and 2024\nBy Prajit Adhikari")
+
+    menu = ["Generate Certificate for 2024 contests", "Home", "Generate Certificate for PreTST and TST for 2023 IMO", "View Statistics"]
     choice = st.sidebar.selectbox("Menu", menu)
 
     if choice == "Generate Certificate for 2024 contests":
         st.subheader("Generate Certificate for 2024 IMO")
-        st.write("""Please select the name of the student and the type of
-                certificate you want to generate. To generate a certificate
-                for NMO, you need to select the name of the student who
-                participated in the last year's NMO. Please note that the name
-                of the student should be the same as the one in the list. Also,
-                for DMO and PMO, select the name of the student from the list
-                from the DMO and PMO name list.""")
-        student_name = st.selectbox("""Select the name of the student(For DMO
-                                    and PMO): """, sorted(dmo_2024['Name']))
-        last_year_student_name = st.selectbox("Select the name for NMO: ",
-                                              sorted(nmo_2024['Name']))
-        tst_2024_student_name = st.selectbox("Select the name for TST: ",
-                                             sorted(tst_2024['Name']))
-        certificate_type = st.selectbox("Select certificate type", ["DMO",
-                                        "PMO", "NMO", "TST"])
+        student_name = st.selectbox("Select the name of the student (For DMO and PMO): ", sorted(dmo_2024['Name']))
+        last_year_student_name = st.selectbox("Select the name for NMO: ", sorted(nmo_2024['Name']))
+        tst_2024_student_name = st.selectbox("Select the name for TST: ", sorted(tst_2024['Name']))
+        certificate_type = st.selectbox("Select certificate type", ["DMO", "PMO", "NMO", "TST"])
         if st.button("Generate"):
             if certificate_type == "DMO":
-                image_bytes = generate_dmo2024_certificate(student_name,
-                                                           "COMIC.TTF",
-                                                            "./2024_certificates/certificate for DMO.png")
+                image_bytes = generate_certificate(student_name, "COMIC.TTF", "./2024_certificates/certificate for DMO.png", dict_dmo_2024, 600, 1100, 750, 710)
             elif certificate_type == "PMO":
-                if student_name in dict_pmo_2024:
-                    image_bytes = generate_pmo_certificate(student_name, "COMIC.TTF",
-                                                   "./2024_certificates/certificate for PMO.png")
-                else:
-                    st.error(f"{student_name} is not in the list of students.")
-                    return None
+                image_bytes = generate_certificate(student_name, "COMIC.TTF", "./2024_certificates/certificate for PMO.png", dict_pmo_2024, 650, 1150, 750, 710)
             elif certificate_type == "NMO":
-                if student_name in dict_nmo_2024 or last_year_student_name in dict_nmo_2024:
-                    image_bytes = generate_nmo2024_certificate(last_year_student_name, "COMIC.TTF",
-                                                       "./2024_certificates/certificate for NMO.png")
-                else:
-                    st.error(f"{student_name} is not in the list of students.")
-                    return None
+                image_bytes = generate_certificate(last_year_student_name, "COMIC.TTF", "./2024_certificates/certificate for NMO.png", dict_nmo_2024, 650, 1150, 750, 710)
             elif certificate_type == "TST":
-                if tst_2024_student_name in dict_tst_2024:
-                    image_bytes = generate_tst2024_certificate(tst_2024_student_name, "COMIC.TTF",
-                                                       "./2024_certificates/certificate for TST.png")
-                else:
-                    st.error(f"{tst_2024_student_name} is not in the list of students.")
-                    return None
+                image_bytes = generate_certificate(tst_2024_student_name, "COMIC.TTF", "./2024_certificates/certificate for TST.png", dict_tst_2024, 650, 1150, 750, 710)
 
             if image_bytes is not None:
                 st.image(image_bytes, caption='Generated certificate')
-                # Use the correct name variable depending on the certificate type
-                if certificate_type == "DMO":
-                    download_name = student_name
-                elif certificate_type == "PMO":
-                    download_name = student_name
-                elif certificate_type == "NMO":
-                    download_name = last_year_student_name
-                elif certificate_type == "TST":
-                    download_name = tst_2024_student_name
-                
+                download_name = student_name if certificate_type != "NMO" else last_year_student_name if certificate_type == "NMO" else tst_2024_student_name
                 st.download_button(
                     "Download Certificate",
                     data=image_bytes,
@@ -296,15 +112,12 @@ def main():
                  "Please find your registration/symbol number here.")
         st.subheader("Generate Certificate")
         student_name = st.selectbox("Select the name of the student: ", sorted(data['Name of Students'].unique()))
-
         certificate_type = st.selectbox("Select certificate type", ["DMO", "NMO"])
         if st.button("Generate"):
             if certificate_type == "DMO":
-                image_bytes = generate_certificate(student_name, "COMIC.TTF",
-                                                   "./for_certificates/certificate for DMO.png")
+                image_bytes = generate_certificate(student_name, "COMIC.TTF", "./for_certificates/certificate for DMO.png", dmo_dict, 600, 1100, 750, 710)
             elif certificate_type == "NMO":
-                image_bytes = generate_nmo_certificate(student_name, "COMIC.TTF",
-                                                       "./for_certificates/certificate for NMO.png")
+                image_bytes = generate_certificate(student_name, "COMIC.TTF", "./for_certificates/certificate for NMO.png", dictionary_for_certificates, 650, 1150, 750, 710)
             if image_bytes is not None:
                 st.image(image_bytes, caption='Generated certificate')
                 st.download_button(
@@ -320,26 +133,25 @@ def main():
         certificate_type = st.selectbox("Select certificate type", ["Pre-TST", "TST"])
         if st.button("Generate"):
             if certificate_type == "Pre-TST":
-                image_bytes = generate_top100_certificate(student_name, "COMIC.TTF",
-                                                  "./for_certificates/pretst2023.png")
+                image_bytes = generate_certificate(student_name, "COMIC.TTF", "./for_certificates/pretst2023.png", top100_dict, 750, 1150, 750, 710)
             elif certificate_type == "TST":
-                image_bytes = generate_top25_certificate(student_name, "COMIC.TTF",
-                                                 "./for_certificates/TST round certificate.png")
+                image_bytes = generate_certificate(student_name, "COMIC.TTF", "./for_certificates/TST round certificate.png", top25_dict, 750, 1150, 750, 710)
 
-        if image_bytes is not None:
-            st.image(image_bytes, caption='Generated certificate')
-            st.download_button(
-                "Download Certificate",
-                data=image_bytes,
-                file_name=f'{student_name}_{certificate_type}_2023_certificate.png',
-                mime='image/png'
-            )
+            if image_bytes is not None:
+                st.image(image_bytes, caption='Generated certificate')
+                st.download_button(
+                    "Download Certificate",
+                    data=image_bytes,
+                    file_name=f'{student_name}_{certificate_type}_2023_certificate.png',
+                    mime='image/png'
+                )
+
     elif choice == "View Statistics":
         st.subheader("View Statistics")
         if st.button("Show Distribution"):
-            plot_distribution()
+            plot_distribution(score)
         if st.button("Show Stats"):
-            show_stats()
+            show_stats(score)
 
 
 if __name__ == "__main__":
