@@ -186,16 +186,20 @@ def main():
             
             try:
                 if certificate_type == "DMO":
-                    image_bytes = generate_certificate(student_name, "COMIC.TTF", "./2024_certificates/certificate for DMO.png", dict_dmo_2024, 600, 1100, 750, 710)
+                    # Reduced x_symbol from 750 to 650
+                    image_bytes = generate_certificate(student_name, "COMIC.TTF", "./2024_certificates/certificate for DMO.png", dict_dmo_2024, 600, 1100, 650, 710)
                     download_name = student_name
                 elif certificate_type == "PMO":
-                    image_bytes = generate_certificate(student_name, "COMIC.TTF", "./2024_certificates/certificate for PMO.png", dict_pmo_2024, 650, 1150, 750, 710)
+                    # Reduced x_symbol from 750 to 650
+                    image_bytes = generate_certificate(student_name, "COMIC.TTF", "./2024_certificates/certificate for PMO.png", dict_pmo_2024, 650, 1150, 650, 710)
                     download_name = student_name
                 elif certificate_type == "NMO":
-                    image_bytes = generate_certificate(last_year_student_name, "COMIC.TTF", "./2024_certificates/certificate for NMO.png", dict_nmo_2024, 650, 1150, 750, 710)
+                    # Reduced x_symbol from 750 to 650
+                    image_bytes = generate_certificate(last_year_student_name, "COMIC.TTF", "./2024_certificates/certificate for NMO.png", dict_nmo_2024, 650, 1150, 650, 710)
                     download_name = last_year_student_name
                 elif certificate_type == "TST":
-                    image_bytes = generate_certificate(tst_2024_student_name, "COMIC.TTF", "./2024_certificates/certificate for TST.png", dict_tst_2024, 650, 1150, 750, 710)
+                    # Reduced x_symbol from 750 to 650
+                    image_bytes = generate_certificate(tst_2024_student_name, "COMIC.TTF", "./2024_certificates/certificate for TST.png", dict_tst_2024, 650, 1150, 650, 710)
                     download_name = tst_2024_student_name
                 
                 if image_bytes is not None:
@@ -221,9 +225,11 @@ def main():
         certificate_type = st.selectbox("Select certificate type", ["DMO", "NMO"])
         if st.button("Generate"):
             if certificate_type == "DMO":
-                image_bytes = generate_certificate(student_name, "COMIC.TTF", "./for_certificates/certificate for DMO.png", dmo_dict, 600, 1100, 750, 710)
+                # Reduced x_symbol from 750 to 650
+                image_bytes = generate_certificate(student_name, "COMIC.TTF", "./for_certificates/certificate for DMO.png", dmo_dict, 600, 1100, 650, 710)
             elif certificate_type == "NMO":
-                image_bytes = generate_certificate(student_name, "COMIC.TTF", "./for_certificates/certificate for NMO.png", dictionary_for_certificates, 650, 1150, 750, 710)
+                # Reduced x_symbol from 750 to 650
+                image_bytes = generate_certificate(student_name, "COMIC.TTF", "./for_certificates/certificate for NMO.png", dictionary_for_certificates, 650, 1150, 650, 710)
             
             if image_bytes is not None:
                 st.image(image_bytes, caption='Generated certificate')
@@ -244,9 +250,11 @@ def main():
         certificate_type = st.selectbox("Select certificate type", ["Pre-TST", "TST"])
         if st.button("Generate"):
             if certificate_type == "Pre-TST":
-                image_bytes = generate_certificate(student_name, "COMIC.TTF", "./for_certificates/pretst2023.png", top100_dict, 750, 1150, 750, 710)
+                # Reduced x_symbol from 750 to 650
+                image_bytes = generate_certificate(student_name, "COMIC.TTF", "./for_certificates/pretst2023.png", top100_dict, 750, 1150, 650, 710)
             elif certificate_type == "TST":
-                image_bytes = generate_certificate(student_name, "COMIC.TTF", "./for_certificates/TST round certificate.png", top25_dict, 750, 1150, 750, 710)
+                # Reduced x_symbol from 750 to 650
+                image_bytes = generate_certificate(student_name, "COMIC.TTF", "./for_certificates/TST round certificate.png", top25_dict, 750, 1150, 650, 710)
 
             if image_bytes is not None:
                 st.image(image_bytes, caption='Generated certificate')
