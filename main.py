@@ -507,6 +507,7 @@ def main():
 
     elif choice == "Generate Certificate for 2025 contests":
         st.subheader("Generate Certificate for 2025 IMO")
+        st.write("Need to check your registration number? Go to #student-information to look up your information.")
         
         # Separate provinces from special categories
         provinces = sorted([p for p in man_2025_dicts.keys() if p not in ['PMO', 'PTST', 'TST']])
@@ -650,6 +651,7 @@ def main():
 
     elif choice == "Generate Certificate for 2024 contests":
         st.subheader("Generate Certificate for 2024 IMO")
+        st.write("Need to check your registration number? Go to #student-information to look up your information.")
         
         # Create name column selector based on available columns
         name_col_dmo = 'Name' if 'Name' in dmo_2024.columns else 'Name of Students' if 'Name of Students' in dmo_2024.columns else dmo_2024.columns[0]
@@ -750,6 +752,7 @@ def main():
     elif choice == "Home":
         st.subheader("Home")
         st.write("Welcome to the Student Certificate Generator and Stats Viewer. Please select an action from the sidebar.")
+        st.write("Need to check your registration number? Go to #student-information to look up your information.")
         st.subheader("Generate Certificate")
         
         # Use proper column name for student selection
@@ -791,6 +794,7 @@ def main():
 
     elif choice == "Generate Certificate for PreTST and TST for 2023 IMO":
         st.subheader("Generate Certificate for PreTST and TST 2023 IMO")
+        st.write("Need to check your registration number? Go to #student-information to look up your information.")
         
         # Use proper column name for student selection
         name_col = 'Name of Students' if 'Name of Students' in top100.columns else 'Name'
