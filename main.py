@@ -293,10 +293,24 @@ def main():
                 name_col = ('Name' if 'Name' in df_cat.columns
                            else 'Name of Students' if 'Name of Students' in df_cat.columns
                            else df_cat.columns[2])
+                reg_col = ('Registration No.' if 'Registration No.' in df_cat.columns
+                          else 'Registration No' if 'Registration No' in df_cat.columns
+                          else df_cat.columns[1])
                 
                 # Get names, ensure they're in title case, strip whitespace, and sort
                 names = sorted(df_cat[name_col].str.strip().str.title().unique())
                 student_name = st.selectbox("Select Student:", names)
+                
+                # Get student's registration number
+                student_reg = df_cat[df_cat[name_col].str.strip().str.title() == student_name][reg_col].iloc[0]
+                last_4_digits = str(student_reg)[-4:]  # Get last 4 digits
+                
+                # Ask student to verify their registration number
+                user_input = st.text_input(
+                    "Please enter the last 4 digits of your registration number (20XX-IMO-XXXX):",
+                    max_chars=4,
+                    type="password"
+                )
                 
                 cert_templates = {
                     'PMO': 'certificate for PMO.png',
@@ -305,25 +319,28 @@ def main():
                 }
                 
                 if st.button("Generate"):
-                    cert_path = f"./2025_certificates/{cert_templates[category]}"
-                    if not os.path.exists(cert_path):
-                        st.error(f"Certificate template not found for {category}")
-                    else:
-                        img = generate_certificate(
-                            student_name,
-                            "COMIC.TTF",
-                            cert_path,
-                            man_2025_dicts[category],
-                            600, 1100, 650, 710
-                        )
-                        if img:
-                            st.image(img, caption=f"{category} Certificate")
-                            st.download_button(
-                                "Download Certificate",
-                                data=img,
-                                file_name=f"{student_name}_{category}_2025.png",
-                                mime="image/png"
+                    if user_input == last_4_digits:
+                        cert_path = f"./2025_certificates/{cert_templates[category]}"
+                        if not os.path.exists(cert_path):
+                            st.error(f"Certificate template not found for {category}")
+                        else:
+                            img = generate_certificate(
+                                student_name,
+                                "COMIC.TTF",
+                                cert_path,
+                                man_2025_dicts[category],
+                                600, 1100, 650, 710
                             )
+                            if img:
+                                st.image(img, caption=f"{category} Certificate")
+                                st.download_button(
+                                    "Download Certificate",
+                                    data=img,
+                                    file_name=f"{student_name}_{category}_2025.png",
+                                    mime="image/png"
+                                )
+                    else:
+                        st.error("Incorrect registration number. Please try again.")
 
     elif choice == "Generate Certificate for 2024 contests":
         st.subheader("Generate Certificate for 2024 IMO")
