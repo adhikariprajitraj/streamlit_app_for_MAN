@@ -628,7 +628,7 @@ def main():
 
     elif choice == "Generate Certificate for 2025 contests":
         st.subheader("Generate Certificate for 2025 IMO")
-        st.write("Need to check your registration number? Go to #student-information to look up your information.")
+        st.write("Need to check your registration number? Go to #student-information in the menu to look up your information.")
         
         # Separate provinces from special categories
         provinces = sorted([p for p in man_2025_dicts.keys() if p not in ['PMO', 'PTST', 'TST']])
@@ -779,96 +779,78 @@ def main():
         name_col_nmo = 'Name' if 'Name' in nmo_2024.columns else 'Name of Students' if 'Name of Students' in nmo_2024.columns else nmo_2024.columns[0]
         name_col_tst = 'Name' if 'Name' in tst_2024.columns else 'Name of Students' if 'Name of Students' in tst_2024.columns else tst_2024.columns[0]
         
-        # Get names, ensure they're in title case, strip whitespace, and sort
-        dmo_names = sorted(dmo_2024[name_col_dmo].str.strip().str.title().unique())
-        nmo_names = sorted(nmo_2024[name_col_nmo].str.strip().str.title().unique())
-        tst_names = sorted(tst_2024[name_col_tst].str.strip().str.title().unique())
+        # Use radio buttons for certificate type selection
+        certificate_type = st.radio("Select certificate type", ["DMO", "PMO", "NMO", "TST"], horizontal=True)
         
-        # Add search functionality for DMO/PMO names
-        search_term_dmo = st.text_input("Search for your name (DMO/PMO):", "")
-        if search_term_dmo:
-            similar_names = find_similar_names(search_term_dmo, dmo_names)
+        # Get appropriate names based on certificate type
+        if certificate_type in ["DMO", "PMO"]:
+            names = sorted(dmo_2024[name_col_dmo].str.strip().str.title().unique())
+            current_dict = dict_dmo_2024 if certificate_type == "DMO" else dict_pmo_2024
+        elif certificate_type == "NMO":
+            names = sorted(nmo_2024[name_col_nmo].str.strip().str.title().unique())
+            current_dict = dict_nmo_2024
+        else:  # TST
+            names = sorted(tst_2024[name_col_tst].str.strip().str.title().unique())
+            current_dict = dict_tst_2024
+        
+        # Add search functionality
+        search_term = st.text_input(f"Search for your name ({certificate_type}):", "")
+        if search_term:
+            similar_names = find_similar_names(search_term, names)
             if similar_names:
-                st.write("Similar names found for DMO/PMO:")
+                st.write("Similar names found:")
                 name_options = [name for name, score in similar_names]
-                student_name = st.selectbox("Select your name:", name_options)
+                selected_name = st.selectbox("Select your name:", name_options)
             else:
                 st.warning("No similar names found. Please try a different search term.")
-                student_name = st.selectbox("Select from all names:", dmo_names)
+                selected_name = st.selectbox("Select from all names:", names)
         else:
-            student_name = None
+            selected_name = None
 
-        if student_name is None:
-            student_name = dmo_names[0] if dmo_names else None
-        
-        # Add search functionality for NMO names
-        search_term_nmo = st.text_input("Search for your name (NMO):", "")
-        if search_term_nmo:
-            similar_names = find_similar_names(search_term_nmo, nmo_names)
-            if similar_names:
-                st.write("Similar names found for NMO:")
-                name_options = [name for name, score in similar_names]
-                last_year_student_name = st.selectbox("Select your name (NMO):", name_options)
-            else:
-                st.warning("No similar names found. Please try a different search term.")
-                last_year_student_name = st.selectbox("Select from all names:", nmo_names)
-        else:
-            last_year_student_name = None
+        if selected_name is None:
+            selected_name = names[0] if names else None
 
-        if last_year_student_name is None:
-            last_year_student_name = nmo_names[0] if nmo_names else None
-        
-        # Add search functionality for TST names
-        search_term_tst = st.text_input("Search for your name (TST):", "")
-        if search_term_tst:
-            similar_names = find_similar_names(search_term_tst, tst_names)
-            if similar_names:
-                st.write("Similar names found for TST:")
-                name_options = [name for name, score in similar_names]
-                tst_2024_student_name = st.selectbox("Select your name (TST):", name_options)
-            else:
-                st.warning("No similar names found. Please try a different search term.")
-                tst_2024_student_name = st.selectbox("Select from all names:", tst_names)
-        else:
-            tst_2024_student_name = None
-
-        if tst_2024_student_name is None:
-            tst_2024_student_name = tst_names[0] if tst_names else None
-
-        certificate_type = st.selectbox("Select certificate type", ["DMO", "PMO", "NMO", "TST"])
-        
-        if st.button("Generate"):
-            image_bytes = None
-            download_name = ""
-            
-            try:
-                if certificate_type == "DMO":
-                    # Reduced x_symbol from 750 to 650
-                    image_bytes = generate_certificate(student_name, "COMIC.TTF", "./2024_certificates/certificate for DMO.png", dict_dmo_2024, 600, 1100, 650, 710)
-                    download_name = student_name
-                elif certificate_type == "PMO":
-                    # Reduced x_symbol from 750 to 650
-                    image_bytes = generate_certificate(student_name, "COMIC.TTF", "./2024_certificates/certificate for PMO.png", dict_pmo_2024, 650, 1150, 650, 710)
-                    download_name = student_name
-                elif certificate_type == "NMO":
-                    # Reduced x_symbol from 750 to 650
-                    image_bytes = generate_certificate(last_year_student_name, "COMIC.TTF", "./2024_certificates/certificate for NMO.png", dict_nmo_2024, 650, 1150, 650, 710)
-                    download_name = last_year_student_name
-                elif certificate_type == "TST":
-                    # Reduced x_symbol from 750 to 650
-                    image_bytes = generate_certificate(tst_2024_student_name, "COMIC.TTF", "./2024_certificates/certificate for TST.png", dict_tst_2024, 650, 1150, 650, 710)
-                    download_name = tst_2024_student_name
+        # Get student's registration number and ask for verification
+        if selected_name:
+            student_reg = current_dict.get(selected_name, "")
+            if student_reg:
+                last_4_digits = str(student_reg)[-4:]  # Get last 4 digits
                 
-                if image_bytes is not None:
-                    st.image(image_bytes, caption='Generated certificate')
-                    st.download_button(
-                        "Download Certificate",
-                        data=image_bytes,
-                        file_name=f'{download_name}_{certificate_type}_2024_certificate.png',
-                        mime='image/png'
-                    )
-            except Exception as e:
-                st.error(f"Error in certificate generation: {e}")
+                # Ask student to verify their registration number
+                user_input = st.text_input(
+                    f"Please enter the last 4 digits of your registration number (2024-IMO-XXXX):",
+                    max_chars=4,
+                    type="password"
+                )
+                
+                if st.button("Generate"):
+                    if user_input == last_4_digits:
+                        try:
+                            if certificate_type == "DMO":
+                                # Reduced x_symbol from 750 to 650
+                                image_bytes = generate_certificate(selected_name, "COMIC.TTF", "./2024_certificates/certificate for DMO.png", dict_dmo_2024, 600, 1100, 650, 710)
+                            elif certificate_type == "PMO":
+                                # Reduced x_symbol from 750 to 650
+                                image_bytes = generate_certificate(selected_name, "COMIC.TTF", "./2024_certificates/certificate for PMO.png", dict_pmo_2024, 650, 1150, 650, 710)
+                            elif certificate_type == "NMO":
+                                # Reduced x_symbol from 750 to 650
+                                image_bytes = generate_certificate(selected_name, "COMIC.TTF", "./2024_certificates/certificate for NMO.png", dict_nmo_2024, 650, 1150, 650, 710)
+                            elif certificate_type == "TST":
+                                # Reduced x_symbol from 750 to 650
+                                image_bytes = generate_certificate(selected_name, "COMIC.TTF", "./2024_certificates/certificate for TST.png", dict_tst_2024, 650, 1150, 650, 710)
+                            
+                            if image_bytes is not None:
+                                st.image(image_bytes, caption='Generated certificate')
+                                st.download_button(
+                                    "Download Certificate",
+                                    data=image_bytes,
+                                    file_name=f'{selected_name}_{certificate_type}_2024_certificate.png',
+                                    mime='image/png'
+                                )
+                        except Exception as e:
+                            st.error(f"Error in certificate generation: {e}")
+                    else:
+                        st.error("Incorrect registration number. Please try again.")
 
     elif choice == "Home":
         st.subheader("Home")
