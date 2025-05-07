@@ -446,7 +446,7 @@ def main():
             "Generate Certificate for 2024 contests",
             "Home",
             "Generate Certificate for PreTST and TST for 2023 IMO",
-            "View Statistics"
+            "View Statistics 2023"
             ]
     choice = st.sidebar.selectbox("Menu", menu)
 
@@ -833,8 +833,8 @@ def main():
                     mime='image/png'
                 )
 
-    elif choice == "View Statistics":
-        st.subheader("View Statistics")
+    elif choice == "View Statistics 2023":
+        st.subheader("View Statistics 2023")
         if len(score) > 0:
             if st.button("Show Distribution"):
                 plot_distribution(score)
