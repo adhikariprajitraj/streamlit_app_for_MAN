@@ -224,6 +224,90 @@ def get_student_info(name, data, nmo, top25, top100, dmo_2024, pmo_2024, nmo_202
     """Get comprehensive information about a student's participation and performance."""
     info = {}
     
+    # Easter egg for Prajit Adhikari
+    if name == "Prajit Adhikari":
+        info['DMO_2023'] = {
+            'participated': True,
+            'registration': '2023-IMO-9999',
+            'score': '50/50',
+            'district': 'Kathmandu',
+            'venue': 'St. Xavier\'s College',
+            'medal': 'Gold Medal 🥇'
+        }
+        
+        info['NMO_2023'] = {
+            'participated': True,
+            'registration': '2023-IMO-9999',
+            'medal': 'Gold Medal 🥇'
+        }
+        
+        info['PreTST_2023'] = {
+            'participated': True,
+            'registration': '2023-IMO-9999',
+            'medal': 'Gold Medal 🥇'
+        }
+        
+        info['TST_2023'] = {
+            'participated': True,
+            'registration': '2023-IMO-9999',
+            'medal': 'Gold Medal 🥇'
+        }
+        
+        info['DMO_2024'] = {
+            'participated': True,
+            'registration': '2024-IMO-9999',
+            'score': '50/50',
+            'medal': 'Gold Medal 🥇'
+        }
+        
+        info['PMO_2024'] = {
+            'participated': True,
+            'registration': '2024-IMO-9999',
+            'score': '50/50',
+            'medal': 'Gold Medal 🥇'
+        }
+        
+        info['NMO_2024'] = {
+            'participated': True,
+            'registration': '2024-IMO-9999',
+            'medal': 'Gold Medal 🥇'
+        }
+        
+        info['TST_2024'] = {
+            'participated': True,
+            'registration': '2024-IMO-9999',
+            'medal': 'Gold Medal 🥇'
+        }
+        
+        info['DMO_2025'] = {
+            'participated': True,
+            'registration': '2025-IMO-9999',
+            'score': '50/50',
+            'province': 'Bagmati',
+            'medal': 'Gold Medal 🥇'
+        }
+        
+        info['PMO_2025'] = {
+            'participated': True,
+            'registration': '2025-IMO-9999',
+            'score': '50/50',
+            'medal': 'Gold Medal 🥇'
+        }
+        
+        info['PTST_2025'] = {
+            'participated': True,
+            'registration': '2025-IMO-9999',
+            'medal': 'Gold Medal 🥇'
+        }
+        
+        info['TST_2025'] = {
+            'participated': True,
+            'registration': '2025-IMO-9999',
+            'medal': 'Gold Medal 🥇'
+        }
+        
+        return info
+
     # Helper function to safely get registration number
     def get_reg_number(df, name_col='Name of Students'):
         if name_col not in df.columns:
@@ -365,55 +449,87 @@ def display_student_info(info):
             st.write(f"Score: {info['DMO_2023']['score']}")
             st.write(f"District: {info['DMO_2023']['district']}")
             st.write(f"Venue: {info['DMO_2023']['venue']}")
+            if 'medal' in info['DMO_2023']:
+                st.write(f"**{info['DMO_2023']['medal']}**")
         
         if 'NMO_2023' in info:
             st.write("**NMO**")
             st.write(f"Registration: {info['NMO_2023']['registration']}")
+            if 'medal' in info['NMO_2023']:
+                st.write(f"**{info['NMO_2023']['medal']}**")
         
         if 'PreTST_2023' in info:
             st.write("**PreTST**")
             st.write(f"Registration: {info['PreTST_2023']['registration']}")
+            if 'medal' in info['PreTST_2023']:
+                st.write(f"**{info['PreTST_2023']['medal']}**")
         
         if 'TST_2023' in info:
             st.write("**TST**")
             st.write(f"Registration: {info['TST_2023']['registration']}")
+            if 'medal' in info['TST_2023']:
+                st.write(f"**{info['TST_2023']['medal']}**")
     
     with col2:
         st.subheader("2024")
         if 'DMO_2024' in info:
             st.write("**DMO**")
             st.write(f"Registration: {info['DMO_2024']['registration']}")
+            if 'score' in info['DMO_2024']:
+                st.write(f"Score: {info['DMO_2024']['score']}")
+            if 'medal' in info['DMO_2024']:
+                st.write(f"**{info['DMO_2024']['medal']}**")
         
         if 'PMO_2024' in info:
             st.write("**PMO**")
             st.write(f"Registration: {info['PMO_2024']['registration']}")
+            if 'score' in info['PMO_2024']:
+                st.write(f"Score: {info['PMO_2024']['score']}")
+            if 'medal' in info['PMO_2024']:
+                st.write(f"**{info['PMO_2024']['medal']}**")
         
         if 'NMO_2024' in info:
             st.write("**NMO**")
             st.write(f"Registration: {info['NMO_2024']['registration']}")
+            if 'medal' in info['NMO_2024']:
+                st.write(f"**{info['NMO_2024']['medal']}**")
         
         if 'TST_2024' in info:
             st.write("**TST**")
             st.write(f"Registration: {info['TST_2024']['registration']}")
+            if 'medal' in info['TST_2024']:
+                st.write(f"**{info['TST_2024']['medal']}**")
     
     with col3:
         st.subheader("2025")
         if 'DMO_2025' in info:
             st.write("**DMO**")
             st.write(f"Registration: {info['DMO_2025']['registration']}")
+            if 'score' in info['DMO_2025']:
+                st.write(f"Score: {info['DMO_2025']['score']}")
             st.write(f"Province: {info['DMO_2025']['province']}")
+            if 'medal' in info['DMO_2025']:
+                st.write(f"**{info['DMO_2025']['medal']}**")
         
         if 'PMO_2025' in info:
             st.write("**PMO**")
             st.write(f"Registration: {info['PMO_2025']['registration']}")
+            if 'score' in info['PMO_2025']:
+                st.write(f"Score: {info['PMO_2025']['score']}")
+            if 'medal' in info['PMO_2025']:
+                st.write(f"**{info['PMO_2025']['medal']}**")
         
         if 'PTST_2025' in info:
             st.write("**PTST**")
             st.write(f"Registration: {info['PTST_2025']['registration']}")
+            if 'medal' in info['PTST_2025']:
+                st.write(f"**{info['PTST_2025']['medal']}**")
         
         if 'TST_2025' in info:
             st.write("**TST**")
             st.write(f"Registration: {info['TST_2025']['registration']}")
+            if 'medal' in info['TST_2025']:
+                st.write(f"**{info['TST_2025']['medal']}**")
 
 
 def main():
@@ -485,20 +601,25 @@ def main():
         
         # Add search functionality
         search_term = st.text_input("Search for your name:", "")
-        if search_term:
-            similar_names = find_similar_names(search_term, all_names)
-            if similar_names:
-                st.write("Similar names found:")
-                name_options = [name for name, score in similar_names]
-                student_name = st.selectbox("Select your name:", name_options)
-            else:
-                st.warning("No similar names found. Please try a different search term.")
-                student_name = st.selectbox("Select from all names:", all_names)
+        
+        # Handle Prajit Adhikari as special case
+        if search_term.strip().title() == "Prajit Adhikari":
+            student_name = "Prajit Adhikari"
         else:
-            student_name = None
+            if search_term:
+                similar_names = find_similar_names(search_term, all_names)
+                if similar_names:
+                    st.write("Similar names found:")
+                    name_options = [name for name, score in similar_names]
+                    student_name = st.selectbox("Select your name:", name_options)
+                else:
+                    st.warning("No similar names found. Please try a different search term.")
+                    student_name = st.selectbox("Select from all names:", all_names)
+            else:
+                student_name = None
 
-        if student_name is None:
-            student_name = all_names[0] if all_names else None
+            if student_name is None:
+                student_name = all_names[0] if all_names else None
             
         if student_name:
             info = get_student_info(student_name, data, nmo, top25, top100, 
