@@ -6,6 +6,7 @@ from PIL import Image, ImageDraw, ImageFont
 import numpy as np
 import io
 import os
+from fuzzywuzzy import process
 
 
 def convert_to_dict(df, name_col=None, reg_col=None):
@@ -198,6 +199,27 @@ def show_stats(score):
              f'**Max: ** {np.max(score)} \n **Min:** {np.min(score)}')
 
 
+def find_similar_names(search_term, names_list, limit=5, score_cutoff=60):
+    """Find similar names using fuzzy string matching.
+    
+    Args:
+        search_term (str): The name to search for
+        names_list (list): List of names to search in
+        limit (int): Maximum number of results to return
+        score_cutoff (int): Minimum similarity score (0-100)
+        
+    Returns:
+        list: List of tuples containing (name, similarity_score)
+    """
+    search_term = search_term.strip().title()
+    if not search_term:
+        return []
+    
+    # Use process.extractBests for getting top matches with their scores
+    matches = process.extractBests(search_term, names_list, score_cutoff=score_cutoff, limit=limit)
+    return matches
+
+
 def main():
     # Load data
     result = load_data()
@@ -251,8 +273,24 @@ def main():
                 
                 # Get names, ensure they're in title case, strip whitespace, and sort
                 names = sorted(df_prov[name_col].str.strip().str.title().unique())
-                student_name = st.selectbox("Select Student:", names)
                 
+                # Add search functionality
+                search_term = st.text_input("Search for your name:", "")
+                if search_term:
+                    similar_names = find_similar_names(search_term, names)
+                    if similar_names:
+                        st.write("Similar names found:")
+                        name_options = [name for name, score in similar_names]
+                        student_name = st.selectbox("Select your name:", name_options)
+                    else:
+                        st.warning("No similar names found. Please try a different search term.")
+                        student_name = st.selectbox("Select from all names:", names)
+                else:
+                    student_name = None
+
+                if student_name is None:
+                    student_name = names[0] if names else None
+
                 # Map province names to certificate filenames
                 cert_map = {
                     'Koshi': 'DMO 2025 KOshi.png',
@@ -299,8 +337,24 @@ def main():
                 
                 # Get names, ensure they're in title case, strip whitespace, and sort
                 names = sorted(df_cat[name_col].str.strip().str.title().unique())
-                student_name = st.selectbox("Select Student:", names)
                 
+                # Add search functionality
+                search_term = st.text_input("Search for your name:", "")
+                if search_term:
+                    similar_names = find_similar_names(search_term, names)
+                    if similar_names:
+                        st.write("Similar names found:")
+                        name_options = [name for name, score in similar_names]
+                        student_name = st.selectbox("Select your name:", name_options)
+                    else:
+                        st.warning("No similar names found. Please try a different search term.")
+                        student_name = st.selectbox("Select from all names:", names)
+                else:
+                    student_name = None
+
+                if student_name is None:
+                    student_name = names[0] if names else None
+
                 # Get student's registration number
                 student_reg = df_cat[df_cat[name_col].str.strip().str.title() == student_name][reg_col].iloc[0]
                 last_4_digits = str(student_reg)[-4:]  # Get last 4 digits
@@ -355,9 +409,57 @@ def main():
         nmo_names = sorted(nmo_2024[name_col_nmo].str.strip().str.title().unique())
         tst_names = sorted(tst_2024[name_col_tst].str.strip().str.title().unique())
         
-        student_name = st.selectbox("Select the name of the student (For DMO and PMO): ", dmo_names)
-        last_year_student_name = st.selectbox("Select the name for NMO: ", nmo_names)
-        tst_2024_student_name = st.selectbox("Select the name for TST: ", tst_names)
+        # Add search functionality for DMO/PMO names
+        search_term_dmo = st.text_input("Search for your name (DMO/PMO):", "")
+        if search_term_dmo:
+            similar_names = find_similar_names(search_term_dmo, dmo_names)
+            if similar_names:
+                st.write("Similar names found for DMO/PMO:")
+                name_options = [name for name, score in similar_names]
+                student_name = st.selectbox("Select your name:", name_options)
+            else:
+                st.warning("No similar names found. Please try a different search term.")
+                student_name = st.selectbox("Select from all names:", dmo_names)
+        else:
+            student_name = None
+
+        if student_name is None:
+            student_name = dmo_names[0] if dmo_names else None
+        
+        # Add search functionality for NMO names
+        search_term_nmo = st.text_input("Search for your name (NMO):", "")
+        if search_term_nmo:
+            similar_names = find_similar_names(search_term_nmo, nmo_names)
+            if similar_names:
+                st.write("Similar names found for NMO:")
+                name_options = [name for name, score in similar_names]
+                last_year_student_name = st.selectbox("Select your name (NMO):", name_options)
+            else:
+                st.warning("No similar names found. Please try a different search term.")
+                last_year_student_name = st.selectbox("Select from all names:", nmo_names)
+        else:
+            last_year_student_name = None
+
+        if last_year_student_name is None:
+            last_year_student_name = nmo_names[0] if nmo_names else None
+        
+        # Add search functionality for TST names
+        search_term_tst = st.text_input("Search for your name (TST):", "")
+        if search_term_tst:
+            similar_names = find_similar_names(search_term_tst, tst_names)
+            if similar_names:
+                st.write("Similar names found for TST:")
+                name_options = [name for name, score in similar_names]
+                tst_2024_student_name = st.selectbox("Select your name (TST):", name_options)
+            else:
+                st.warning("No similar names found. Please try a different search term.")
+                tst_2024_student_name = st.selectbox("Select from all names:", tst_names)
+        else:
+            tst_2024_student_name = None
+
+        if tst_2024_student_name is None:
+            tst_2024_student_name = tst_names[0] if tst_names else None
+
         certificate_type = st.selectbox("Select certificate type", ["DMO", "PMO", "NMO", "TST"])
         
         if st.button("Generate"):
@@ -400,15 +502,30 @@ def main():
         
         # Use proper column name for student selection
         name_col = 'Name of Students' if 'Name of Students' in data.columns else 'Name'
-        student_name = st.selectbox("Select the name of the student: ", sorted(data[name_col].unique()))
+        names = sorted(data[name_col].unique())
+        
+        # Add search functionality
+        search_term = st.text_input("Search for your name:", "")
+        if search_term:
+            similar_names = find_similar_names(search_term, names)
+            if similar_names:
+                st.write("Similar names found:")
+                name_options = [name for name, score in similar_names]
+                student_name = st.selectbox("Select your name:", name_options)
+            else:
+                st.warning("No similar names found. Please try a different search term.")
+                student_name = st.selectbox("Select from all names:", names)
+        else:
+            student_name = None
+
+        if student_name is None:
+            student_name = names[0] if names else None
         
         certificate_type = st.selectbox("Select certificate type", ["DMO", "NMO"])
         if st.button("Generate"):
             if certificate_type == "DMO":
-                # Reduced x_symbol from 750 to 650
                 image_bytes = generate_certificate(student_name, "COMIC.TTF", "./for_certificates/certificate for DMO.png", dmo_dict, 600, 1100, 650, 710)
             elif certificate_type == "NMO":
-                # Reduced x_symbol from 750 to 650
                 image_bytes = generate_certificate(student_name, "COMIC.TTF", "./for_certificates/certificate for NMO.png", dictionary_for_certificates, 650, 1150, 650, 710)
             
             if image_bytes is not None:
@@ -425,15 +542,30 @@ def main():
         
         # Use proper column name for student selection
         name_col = 'Name of Students' if 'Name of Students' in top100.columns else 'Name'
-        student_name = st.selectbox("Select the name of the student: ", sorted(top100[name_col]))
+        names = sorted(top100[name_col])
+        
+        # Add search functionality
+        search_term = st.text_input("Search for your name:", "")
+        if search_term:
+            similar_names = find_similar_names(search_term, names)
+            if similar_names:
+                st.write("Similar names found:")
+                name_options = [name for name, score in similar_names]
+                student_name = st.selectbox("Select your name:", name_options)
+            else:
+                st.warning("No similar names found. Please try a different search term.")
+                student_name = st.selectbox("Select from all names:", names)
+        else:
+            student_name = None
+
+        if student_name is None:
+            student_name = names[0] if names else None
         
         certificate_type = st.selectbox("Select certificate type", ["Pre-TST", "TST"])
         if st.button("Generate"):
             if certificate_type == "Pre-TST":
-                # Reduced x_symbol from 750 to 650
                 image_bytes = generate_certificate(student_name, "COMIC.TTF", "./for_certificates/pretst2023.png", top100_dict, 750, 1150, 650, 710)
             elif certificate_type == "TST":
-                # Reduced x_symbol from 750 to 650
                 image_bytes = generate_certificate(student_name, "COMIC.TTF", "./for_certificates/TST round certificate.png", top25_dict, 750, 1150, 650, 710)
 
             if image_bytes is not None:
