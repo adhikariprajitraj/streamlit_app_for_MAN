@@ -62,7 +62,7 @@ def load_data():
                 'Gandaki': './2025 result/csv_files/Gandaki.csv',
                 'Karnali': './2025 result/csv_files/Karnali.csv',
                 'Koshi': './2025 result/csv_files/Koshi.csv',
-                'KTM': './2025 result/csv_files/KTM.csv',
+                'Kathmandu Valley': './2025 result/csv_files/KTM.csv',
                 'Lumbini': './2025 result/csv_files/Lumbini.csv',
                 'Madhesh': './2025 result/csv_files/Madhesh.csv',
                 'Sudurpaschim': './2025 result/csv_files/Sudurpaschim.csv'
@@ -674,7 +674,7 @@ def main():
                     'Lumbini': 'DMO 2025 Lumbini.png',
                     'Karnali': 'DMO 2025 Karnali.png',
                     'Sudurpaschim': 'DMO 2025 Sudurpaschim.png',
-                    'KTM': 'DMO 2025 Kathmandu valley.png'
+                    'Kathmandu Valley': 'DMO 2025 Kathmandu valley.png'
                 }
                 
                 if st.button("Generate"):
