@@ -82,8 +82,8 @@ def load_data():
                     df[name_col] = df[name_col].str.strip().str.title()
                     
                     man_2025_all[province] = df
-                except Exception as e:
-                    st.sidebar.warning(f"Failed to load {province} data: {e}")
+                except Exception:
+                    pass
             
             # Load special categories
             pmo_2025 = pd.read_csv('./2025 result/csv_files/PMO.csv')
@@ -100,25 +100,8 @@ def load_data():
             man_2025_all['PTST'] = ptst_2025
             man_2025_all['TST'] = tst_2025
             
-            if man_2025_all:
-                st.sidebar.success(f"Loaded 2025 data: {list(man_2025_all.keys())}")
-            else:
-                st.sidebar.warning("No 2025 data found")
-                
-        except Exception as e:
-            st.sidebar.warning(f"2025 data load failed: {e}")
+        except Exception:
             man_2025_all = {}
-        
-        # Debug information
-        st.sidebar.expander("Debug Info", expanded=False).write({
-            "DMO 2023 columns": data.columns.tolist(),
-            "NMO columns": nmo.columns.tolist(),
-            "DMO 2024 columns": dmo_2024.columns.tolist(),
-            "PMO 2024 columns": pmo_2024.columns.tolist(),
-            "NMO 2024 columns": nmo_2024.columns.tolist(),
-            "TST 2024 columns": tst_2024.columns.tolist(),
-            "2025 available data": list(man_2025_all.keys()) if man_2025_all else "none"
-        })
         
         return data, nmo, top25, top100, dmo_2024, pmo_2024, nmo_2024, tst_2024, man_2025_all
     except FileNotFoundError as e:
