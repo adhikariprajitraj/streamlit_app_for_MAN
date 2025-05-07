@@ -225,7 +225,7 @@ def get_student_info(name, data, nmo, top25, top100, dmo_2024, pmo_2024, nmo_202
     info = {}
     
     # Easter egg for Prajit Adhikari
-    if name == "Prajit Adhikari":
+    if name == "Prajit Adhikari" or name == "Kritesh Dhakal":
         info['DMO_2023'] = {
             'participated': True,
             'registration': '2023-IMO-9999',
