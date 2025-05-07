@@ -220,6 +220,202 @@ def find_similar_names(search_term, names_list, limit=5, score_cutoff=60):
     return matches
 
 
+def get_student_info(name, data, nmo, top25, top100, dmo_2024, pmo_2024, nmo_2024, tst_2024, man_2025_all):
+    """Get comprehensive information about a student's participation and performance."""
+    info = {}
+    
+    # Helper function to safely get registration number
+    def get_reg_number(df, name_col='Name of Students'):
+        if name_col not in df.columns:
+            name_col = 'Name' if 'Name' in df.columns else df.columns[2]
+        reg_col = ('Registration No.' if 'Registration No.' in df.columns 
+                  else 'Registration No' if 'Registration No' in df.columns 
+                  else 'Symbol No.' if 'Symbol No.' in df.columns
+                  else df.columns[1])
+        
+        matches = df[df[name_col].str.strip().str.title() == name]
+        if not matches.empty:
+            return str(matches[reg_col].iloc[0])
+        return None
+
+    # Helper function to safely get score
+    def get_score(df, name_col='Name of Students'):
+        if name_col not in df.columns:
+            name_col = 'Name' if 'Name' in df.columns else df.columns[2]
+        
+        if 'Score' not in df.columns:
+            return None
+            
+        matches = df[df[name_col].str.strip().str.title() == name]
+        if not matches.empty:
+            return matches['Score'].iloc[0]
+        return None
+
+    # Check 2023 participation
+    if name in data['Name of Students'].str.strip().str.title().values:
+        info['DMO_2023'] = {
+            'participated': True,
+            'registration': get_reg_number(data),
+            'score': get_score(data),
+            'district': data[data['Name of Students'].str.strip().str.title() == name]['District'].iloc[0],
+            'venue': data[data['Name of Students'].str.strip().str.title() == name]['Venue'].iloc[0]
+        }
+    
+    if name in nmo['Name of Students'].str.strip().str.title().values:
+        info['NMO_2023'] = {
+            'participated': True,
+            'registration': get_reg_number(nmo)
+        }
+    
+    # Check PreTST and TST 2023
+    if name in top100['Name of Students'].str.strip().str.title().values:
+        info['PreTST_2023'] = {
+            'participated': True,
+            'registration': get_reg_number(top100)
+        }
+    
+    if name in top25['Name of Students'].str.strip().str.title().values:
+        info['TST_2023'] = {
+            'participated': True,
+            'registration': get_reg_number(top25)
+        }
+    
+    # Check 2024 participation
+    name_col_dmo = 'Name' if 'Name' in dmo_2024.columns else 'Name of Students'
+    if name in dmo_2024[name_col_dmo].str.strip().str.title().values:
+        info['DMO_2024'] = {
+            'participated': True,
+            'registration': get_reg_number(dmo_2024, name_col_dmo)
+        }
+    
+    name_col_pmo = 'Name' if 'Name' in pmo_2024.columns else 'Name of Students'
+    if name in pmo_2024[name_col_pmo].str.strip().str.title().values:
+        info['PMO_2024'] = {
+            'participated': True,
+            'registration': get_reg_number(pmo_2024, name_col_pmo)
+        }
+    
+    name_col_nmo = 'Name' if 'Name' in nmo_2024.columns else 'Name of Students'
+    if name in nmo_2024[name_col_nmo].str.strip().str.title().values:
+        info['NMO_2024'] = {
+            'participated': True,
+            'registration': get_reg_number(nmo_2024, name_col_nmo)
+        }
+    
+    name_col_tst = 'Name' if 'Name' in tst_2024.columns else 'Name of Students'
+    if name in tst_2024[name_col_tst].str.strip().str.title().values:
+        info['TST_2024'] = {
+            'participated': True,
+            'registration': get_reg_number(tst_2024, name_col_tst)
+        }
+    
+    # Check 2025 participation
+    for province, df in man_2025_all.items():
+        if province not in ['PMO', 'PTST', 'TST']:
+            name_col = ('Name' if 'Name' in df.columns 
+                       else 'Name of Students' if 'Name of Students' in df.columns
+                       else 'Name of the student' if 'Name of the student' in df.columns
+                       else df.columns[2])
+            
+            if name in df[name_col].str.strip().str.title().values:
+                info['DMO_2025'] = {
+                    'participated': True,
+                    'registration': get_reg_number(df, name_col),
+                    'province': province
+                }
+                break
+    
+    # Check 2025 special categories
+    special_categories = {
+        'PMO': 'PMO_2025',
+        'PTST': 'PTST_2025',
+        'TST': 'TST_2025'
+    }
+    
+    for category, info_key in special_categories.items():
+        if category in man_2025_all:
+            df = man_2025_all[category]
+            name_col = ('Name' if 'Name' in df.columns 
+                       else 'Name of Students' if 'Name of Students' in df.columns
+                       else df.columns[2])
+            
+            if name in df[name_col].str.strip().str.title().values:
+                info[info_key] = {
+                    'participated': True,
+                    'registration': get_reg_number(df, name_col)
+                }
+    
+    return info
+
+
+def display_student_info(info):
+    """Display student information in a formatted way."""
+    if not info:
+        st.warning("No participation records found.")
+        return
+    
+    # Create three columns for different years
+    col1, col2, col3 = st.columns(3)
+    
+    with col1:
+        st.subheader("2023")
+        if 'DMO_2023' in info:
+            st.write("**DMO**")
+            st.write(f"Registration: {info['DMO_2023']['registration']}")
+            st.write(f"Score: {info['DMO_2023']['score']}")
+            st.write(f"District: {info['DMO_2023']['district']}")
+            st.write(f"Venue: {info['DMO_2023']['venue']}")
+        
+        if 'NMO_2023' in info:
+            st.write("**NMO**")
+            st.write(f"Registration: {info['NMO_2023']['registration']}")
+        
+        if 'PreTST_2023' in info:
+            st.write("**PreTST**")
+            st.write(f"Registration: {info['PreTST_2023']['registration']}")
+        
+        if 'TST_2023' in info:
+            st.write("**TST**")
+            st.write(f"Registration: {info['TST_2023']['registration']}")
+    
+    with col2:
+        st.subheader("2024")
+        if 'DMO_2024' in info:
+            st.write("**DMO**")
+            st.write(f"Registration: {info['DMO_2024']['registration']}")
+        
+        if 'PMO_2024' in info:
+            st.write("**PMO**")
+            st.write(f"Registration: {info['PMO_2024']['registration']}")
+        
+        if 'NMO_2024' in info:
+            st.write("**NMO**")
+            st.write(f"Registration: {info['NMO_2024']['registration']}")
+        
+        if 'TST_2024' in info:
+            st.write("**TST**")
+            st.write(f"Registration: {info['TST_2024']['registration']}")
+    
+    with col3:
+        st.subheader("2025")
+        if 'DMO_2025' in info:
+            st.write("**DMO**")
+            st.write(f"Registration: {info['DMO_2025']['registration']}")
+            st.write(f"Province: {info['DMO_2025']['province']}")
+        
+        if 'PMO_2025' in info:
+            st.write("**PMO**")
+            st.write(f"Registration: {info['PMO_2025']['registration']}")
+        
+        if 'PTST_2025' in info:
+            st.write("**PTST**")
+            st.write(f"Registration: {info['PTST_2025']['registration']}")
+        
+        if 'TST_2025' in info:
+            st.write("**TST**")
+            st.write(f"Registration: {info['TST_2025']['registration']}")
+
+
 def main():
     # Load data
     result = load_data()
@@ -242,18 +438,74 @@ def main():
      dict_dmo_2024, dict_pmo_2024, dict_nmo_2024, dict_tst_2024,
      man_2025_dicts) = dicts
 
-    # App UI
     st.title("Student Certificate Generator and Stats Viewer for IMO 2023-2025")
     st.caption("By Prajit Adhikari")
 
     menu = ["Generate Certificate for 2025 contests",
+            "Student Information",
             "Generate Certificate for 2024 contests",
             "Home",
             "Generate Certificate for PreTST and TST for 2023 IMO",
-            "View Statistics"]
+            "View Statistics"
+            ]
     choice = st.sidebar.selectbox("Menu", menu)
 
-    if choice == "Generate Certificate for 2025 contests":
+    if choice == "Student Information":
+        st.subheader("Student Information")
+        st.write("Look up your registration numbers and participation history")
+        
+        # Get all unique names across all datasets
+        all_names = set()
+        
+        # 2023 data
+        all_names.update(data['Name of Students'].str.strip().str.title())
+        all_names.update(nmo['Name of Students'].str.strip().str.title())
+        all_names.update(top25['Name of Students'].str.strip().str.title())
+        all_names.update(top100['Name of Students'].str.strip().str.title())
+        
+        # 2024 data
+        name_col_dmo = 'Name' if 'Name' in dmo_2024.columns else 'Name of Students'
+        name_col_nmo = 'Name' if 'Name' in nmo_2024.columns else 'Name of Students'
+        name_col_tst = 'Name' if 'Name' in tst_2024.columns else 'Name of Students'
+        
+        all_names.update(dmo_2024[name_col_dmo].str.strip().str.title())
+        all_names.update(pmo_2024[name_col_dmo].str.strip().str.title())
+        all_names.update(nmo_2024[name_col_nmo].str.strip().str.title())
+        all_names.update(tst_2024[name_col_tst].str.strip().str.title())
+        
+        # 2025 data
+        for df in man_2025_all.values():
+            name_col = ('Name' if 'Name' in df.columns 
+                       else 'Name of Students' if 'Name of Students' in df.columns
+                       else 'Name of the student' if 'Name of the student' in df.columns
+                       else df.columns[2])
+            all_names.update(df[name_col].str.strip().str.title())
+        
+        all_names = sorted(list(all_names))
+        
+        # Add search functionality
+        search_term = st.text_input("Search for your name:", "")
+        if search_term:
+            similar_names = find_similar_names(search_term, all_names)
+            if similar_names:
+                st.write("Similar names found:")
+                name_options = [name for name, score in similar_names]
+                student_name = st.selectbox("Select your name:", name_options)
+            else:
+                st.warning("No similar names found. Please try a different search term.")
+                student_name = st.selectbox("Select from all names:", all_names)
+        else:
+            student_name = None
+
+        if student_name is None:
+            student_name = all_names[0] if all_names else None
+            
+        if student_name:
+            info = get_student_info(student_name, data, nmo, top25, top100, 
+                                  dmo_2024, pmo_2024, nmo_2024, tst_2024, man_2025_all)
+            display_student_info(info)
+
+    elif choice == "Generate Certificate for 2025 contests":
         st.subheader("Generate Certificate for 2025 IMO")
         
         # Separate provinces from special categories
