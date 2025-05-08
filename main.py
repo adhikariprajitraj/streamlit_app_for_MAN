@@ -63,7 +63,7 @@ def load_data():
                 'Karnali': './2025 result/csv_files/Karnali.csv',
                 'Koshi': './2025 result/csv_files/Koshi.csv',
                 'Kathmandu Valley': './2025 result/csv_files/KTM.csv',
-                'Lumbini': './2025 result/csv_files/Lumbini.csv',
+                'Lumbini': './2025 result/csv_files q/Lumbini.csv',
                 'Madhesh': './2025 result/csv_files/Madhesh.csv',
                 'Sudurpaschim': './2025 result/csv_files/Sudurpaschim.csv'
             }
