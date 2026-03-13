@@ -557,7 +557,8 @@ def main():
     st.title("Student Certificate Generator and Stats Viewer for IMO 2023-2025")
     st.caption("By Prajit Adhikari")
 
-    menu = ["Generate Certificate for 2025 contests",
+    menu = ["2026 Contests - Coming Soon",
+            "Generate Certificate for 2025 contests",
             "Student Information",
             "Generate Certificate for 2024 contests",
             "Home",
@@ -566,7 +567,28 @@ def main():
             ]
     choice = st.sidebar.selectbox("Menu", menu)
 
-    if choice == "Student Information":
+    if choice == "2026 Contests - Coming Soon":
+        st.subheader("2026 IMO Contests — Coming Soon")
+        st.info("The 2026 contest season is on its way! Stay tuned for updates.")
+        st.markdown("""
+### Upcoming Contests
+
+| Contest | Expected Date | Status |
+|---|---|---|
+| **DMO 2026** (District Mathematics Olympiad) | Early 2026 | 🔜 Coming Soon |
+| **PMO 2026** (Provincial Mathematics Olympiad) | Mid 2026 | 🔜 Coming Soon |
+| **NMO 2026** (National Mathematics Olympiad) | Mid 2026 | 🔜 Coming Soon |
+| **Pre-TST 2026** | Late 2026 | 🔜 Coming Soon |
+| **TST 2026** (Team Selection Test) | Late 2026 | 🔜 Coming Soon |
+
+---
+
+Results, registration numbers, and certificate generation for 2026 contests will be available here once the contests are completed.
+
+For any inquiries, please contact the organizers.
+        """)
+
+    elif choice == "Student Information":
         st.subheader("Student Information")
         st.write("Look up your registration numbers and participation history")
         
